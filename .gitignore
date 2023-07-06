@@ -1,0 +1,4 @@
+#build folders
+*build/
+#cache folders
+*__pycache__/

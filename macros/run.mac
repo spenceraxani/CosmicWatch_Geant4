@@ -1,0 +1,11 @@
+/run/numberOfThreads 4
+/run/initialize
+
+#general particle source
+/gps/particle gamma
+/gps/pos/centre 0 0 -1 cm
+/gps/direction 0 0 -1
+/gps/ene/type Mono
+/gps/ene/mono 1 keV
+
+/run/beamOn 100
