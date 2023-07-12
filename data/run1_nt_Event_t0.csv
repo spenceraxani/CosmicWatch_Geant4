@@ -1,0 +1,9 @@
+#class tools::wcsv::ntuple
+#title Event
+#separator 44
+#vector_separator 59
+#column int Event
+#column double E
+1,0
+5,0
+8,0

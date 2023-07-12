@@ -12,9 +12,12 @@
 #include "physics.hh"
 #include "action.hh"
 
+#include "G4ScoringManager.hh"
+
 int main(int argc, char** argv){
 
 	G4MTRunManager* runManager = new G4MTRunManager();
+	G4ScoringManager* scoringManager = G4ScoringManager::GetScoringManager();
 
 	runManager->SetUserInitialization(new MyPhysicsList);
 	runManager->SetUserInitialization(new MyDetectorConstruction);
