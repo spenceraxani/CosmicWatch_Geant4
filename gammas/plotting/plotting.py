@@ -35,7 +35,7 @@ distances = [15, 25]
 #list of measuring times [min]
 times = [10, 30, 60, 120, 180, 840]
 
-#Isotope class
+'''#Isotope class
 class Isotope(object):
 
     def __init__(self, name):
@@ -53,11 +53,10 @@ class Isotope(object):
     def addHistogram(self, distance, time, histogram):
     	if distance not in self.Idistances:
     		self.addDistance(distance)
+		if time not in self.Itimes:
+			self.addTime(time)
 
-    	if time not in self.Itimes:
-    		self.addTime(time)
-
-    	self.Ihistograms[distance][time] = histogram
+    	self.Ihistograms[distance][time] = histogram'''
 
 saved_histograms = dict()
 
@@ -116,10 +115,8 @@ for isotope in isotopes:
 
 			#build the histogram
 			freq, bin_edges = np.histogram(data['SiPM[mV]'], bins=nbins, range=(vmin, vmax), density=None, weights=None)
-			
-			bin_centers = 0.5*(bin_edges[:-1] + bin_edges[1:])
 
-			hist = hmc.Histogram(bin_centers, freq)
+			hist = hmc.Histogram(bin_edges, freq)
 
 			#----------statistics----------#
 
@@ -136,10 +133,10 @@ for isotope in isotopes:
 
 			#----------plotting----------#
 			#normalized histogram
-			plt.step(bin_centers, hist.norm_freq, where='mid', label=str(t)+" min", color=color_tab[i])
+			plt.step(hist.bin_centers, hist.norm_freq, where='mid', label=str(t)+" min", color=color_tab[i])
 
 			#error bars in event count
-			plt.fill_between(bin_centers, hist.norm_freq-hist.norm_freq_err, hist.norm_freq+hist.norm_freq_err, step='mid', alpha=0.5, color=color_tab[i])
+			plt.fill_between(hist.bin_centers, hist.norm_freq-hist.norm_freq_err, hist.norm_freq+hist.norm_freq_err, step='mid', alpha=0.5, color=color_tab[i])
 
 			#vertical line at mean
 			plt.axvline(x=hist.mean, linestyle=':', label="mean$=$"+str(hist.mean)+"$\pm$"+str(hist.mean_err), color=color_tab[i])

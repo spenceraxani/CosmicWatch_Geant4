@@ -1,84 +1,85 @@
-import pandas as pd
-import matplotlib.pyplot as plt
+import numpy as np
+import json
 
 import re
 
-data_files = ['../data/Na22-20min.Wfm.csv', '../data/Na22-20min-background.Wfm.csv']
-setup_files = ['../data/Na22-20min.csv', '../data/Na22-20min-background.csv']
+#file where the Histogram class is defined
+import histogram_class as hmc
+
+folder = 'october-13-2023-high-energies/'
+with open("../data/"+folder+"calibration.json", "r") as infile:
+    calibration = json.load(infile)
+
+#list of isotopes
+prefixes = calibration["prefixes"]
+print(prefixes)
+#"name" of background file
+prefix_bkgd = calibration["prefix_bkgd"]
+
+material = 'teflon'
+config = material+'-side'
+
+setup_file = '../data/'+folder+material+'-'+prefix_bkgd+'-20min-october-13-2023.csv'
+
+XStart = None
+XStop = None
+Resolution = None
+NBins = None
+
+with open(setup_file, 'r', encoding="utf-8") as fhandle:
+	for line in fhandle:
+		#X axis data in nV*s
+		read_in = re.search('(?<=XStart:)(.*?)(?=:)', line)
+		if read_in:
+			XStart = float(read_in.group(0))*1e9
+			continue
+
+		read_in = re.search('(?<=XStop:)(.*?)(?=:)', line)
+		if read_in:
+			XStop = float(read_in.group(0))*1e9
+			continue
+
+		read_in = re.search('(?<=Resolution:)(.*?)(?=:)', line)
+		if read_in:
+			Resolution = float(read_in.group(0))*1e9
+			continue
+
+		read_in = re.search('(?<=NumberOfBins:)(.*?)(?=:)', line)
+		if read_in:
+			NBins = int(read_in.group(0))
+
+bin_edges = np.array([XStart+i*Resolution for i in range(NBins+1)])
 
 dFrames = list()
 
-XStart = list()
-XStop = list()
-Resolution = list()
-NBins = list()
+#----------read data----------#
+spectrums = {p:None for p in prefixes}
+max_freq_area = 0
 
-for i, file in enumerate(setup_files):
-	with open(file, 'r', encoding="utf-8") as fhandle:
-		for line in fhandle:
-			read_in = re.search('(?<=XStart:)(.*?)(?=:)', line)
-			if read_in:
-				XStart.append(float(read_in.group(0))*1e9)
-				continue
+freq_bkgd = np.genfromtxt('../data/'+folder+material+'-'+prefix_bkgd+'-20min-october-13-2023.Wfm.csv', dtype=int)
+print(len(freq_bkgd))
 
-			read_in = re.search('(?<=XStop:)(.*?)(?=:)', line)
-			if read_in:
-				XStop.append(float(read_in.group(0))*1e9)
-				continue
+for prefix in prefixes:
+	freq = np.genfromtxt('../data/'+folder+config+'-'+prefix+'-20min-october-13-2023.Wfm.csv', dtype=int)
+	print("not substracting background")
+	spectrums[prefix] = hmc.Histogram(prefix, Resolution, bin_edges, freq)
 
-			read_in = re.search('(?<=Resolution:)(.*?)(?=:)', line)
-			if read_in:
-				Resolution.append(float(read_in.group(0))*1e9)
-				continue
+	#find maximum frequency to normalize
+	temp = spectrums[prefix].freq.max()
+	if max_freq_area < temp:
+		max_freq_area = temp
 
-			read_in = re.search('(?<=NumberOfBins:)(.*?)(?=:)', line)
-			if read_in:
-				NBins.append(int(read_in.group(0)))
+spectrum_bkgd = hmc.Histogram(prefix_bkgd, Resolution, bin_edges, freq_bkgd)
+spectrum_bkgd.normalize(max_freq_area, np.sqrt(max_freq_area))
 
-	dFrames.append(pd.read_csv(data_files[i], names=['counts']))
+spectrum_bkgd.getErrors()
+spectrum_bkgd.print_hist(f_name='../data/'+folder+'spectra/'+material+'-'+prefix_bkgd+'-spectrum.txt')
 
-x = [(i+0.5)*Resolution[0]+XStart[0] for i in range(NBins[0])]
+for prefix in prefixes:
+	#----------statistics----------#
+	spectrums[prefix].normalize(max_freq_area, np.sqrt(max_freq_area))
 
-if XStart[0]!=XStart[1]:
-	print('XStart difference')
-if XStop[0]!=XStop[1]:
-	print('XStart difference')
-if Resolution[0]!=Resolution[1]:
-	print('XStart difference')
-if NBins[0]!=NBins[1]:
-	print('XStart difference')
-
-index = dFrames[0]['counts'].idxmax()
-print(index)
-
-vmax = (index*Resolution[0]+XStart[0])
-print(vmax)
-
-data = (dFrames[0]['counts']-dFrames[1]['counts']).to_frame()
-
-#----------ploting----------#
-fig, ax = plt.subplots()
-
-labels = ['Na22', 'bgnd']
-for i, dframe in enumerate(dFrames):
-	plt.step(x, dframe['counts'], label=labels[i])
-
-#vertical line at mean
-plt.axvline(x=vmax, linestyle=':', label="vmax$=$"+str(vmax))
-
-plt.grid()
-plt.xlabel('SiPM pulse area [nV/s]')
-plt.ylabel('events / ('+str( round(Resolution[0], 3) )+' nV/s)' )
-
-plt.savefig("../figures/raw_LYSO_Na22_20min.pdf", bbox_inches="tight")
-plt.clf()
-
-fig, ax = plt.subplots()
-
-plt.step(x, data['counts'], label='Na22-bgnd')
-
-plt.grid()
-plt.xlabel('SiPM pulse area [nV/s]')
-plt.ylabel('events / ('+str( round(Resolution[0], 3) )+' nV/s)' )
-
-plt.savefig("../figures/LYSO_Na22_20min.pdf", bbox_inches="tight")
+	#spectrums[prefix].getMean()
+	#spectrums[prefix].getSigma()
+	spectrums[prefix].getErrors()
+	spectrums[prefix].print_hist(f_name='../data/'+folder+'spectra/'+config+'-'+prefix+'-spectrum.txt')
