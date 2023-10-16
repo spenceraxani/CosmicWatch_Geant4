@@ -2,3 +2,6 @@
 *build/
 #cache folders
 *__pycache__/
+#binary files
+gammas/data/Waveform_histories/*.bin
+
