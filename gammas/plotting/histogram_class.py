@@ -2,7 +2,7 @@ import numpy as np
 
 class Histogram(object):
 
-	def __init__(self, name=None, bin_size=None, bin_edges=np.empty([1,1]), freq=np.empty([1,1]), f_name=None):
+	def __init__(self, name, bin_size, bin_edges=np.empty([1,1]), freq=np.empty([1,1]), f_name=None):
 		if f_name == None:
 			self.name = name
 			self.bin_centers = 0.5*(bin_edges[:-1] + bin_edges[1:])
