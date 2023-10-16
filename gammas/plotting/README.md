@@ -2,11 +2,11 @@
 
 There are two main ways to obtain data from the Rohde&Schwarz RTO 6 Series oscilloscope in order to create the spectra 1. Save the acquired waveforms history in a binary file and 2. Meassure the area under each waveform directly in the oscilloscope. Each method requires different processing of the obtained data. This README aims to explain the beamline used in each case.
 
-## Wavefor histories
+## Waveform histories
 
 ### getStartPoint.py
 
-Get the start point and DC offset average for every acquisition from a history.bin file obtained from the Rohde&Schwarz RTO 6Series oscilloscope.
+Get the start point and DC offset average for every acquisition from a `history.bin` file obtained from the oscilloscope.
 
 ### ReadWaveforms.py
 
@@ -20,15 +20,15 @@ Reads the amplitud and area information created with **ReadWaveforms.py** and cr
 
 ### oscilloscope.py
 
-Reads histograms outputted by RTO 6 Series oscilloscope and saves it in a `Histogram` object to then be processed by **fit_plot_Spectra.py**
+Reads histograms outputted by RTO 6 Series oscilloscope and saves it in a `Histogram` object again under the `spectra` folder to be processed by **fit_plot_Spectra.py**
 
 # Processing
 
-Once the spectra is contructed we need to do calibrate the energies to their corresponding energy values.
+Once the spectra is constructed we need to calibrate the channels to their corresponding energy values.
 
 ### fit_plot_Spectra.py
 
-Use the spectra created by **createSpectra.py** or **oscilloscope.py** to fit gaussians for the specified peaks in **calibration.json**, this will also create an Intensity-vs-cannel (SiPM pulse area) plot.
+Use the spectra created by **createSpectra.py** or **oscilloscope.py** to fit gaussians for the peaks specified in **calibration.json**, this will also create an Intensity-vs-cannel (SiPM pulse area) plot.
 
 ### calibration.py
 
@@ -40,35 +40,35 @@ Use the obtained centroids from **fit_plot_Spectra.py** to get the channel-energ
 
 `Histogram` class designed to contain all the information and functions necessary to create a normalized spectrum with its respective error in counts. 
 
-Each histogram object requires a `name` string, `bin_size` resolution, `bin_edges` list including the left and right most edges of the first and last bins respectively, and the `freq` corresponding to each bin. This parametes can also be omited and just specify the name `f_name` of the file where the histogram was last saved using the **print_hist** function.
+Each histogram object requires a `name` string, `bin_size` resolution, `bin_edges` list including the left and right most edges of the first and last bins respectively, and the `freq` corresponding to each bin. This parametes can also be omitted and just specify the name `f_name` of the file where the histogram was last saved using the **print_hist()** function.
 
-**normalize** can take two optional parameters: `norm_value` and `norm_value_err`, each frequency value in the original spectrum is divided by `norm_value`. When not `norm_value` is not specified the maximum frequency on the spectrum is calculated and used to normalize.
+**normalize()** can take two optional parameters: `norm_value` and `norm_value_err`, each frequency value in the original spectrum is divided by `norm_value`. When `norm_value` is not specified the maximum frequency on the spectrum is calculated and used to normalize.
 
-**getErrors** calculates the error of each suitable atribute of the histogram object, including for example the error in frequency *N* at each bean as *sqrt(f)*.
+**getErrors()** calculates the error of each suitable atribute of the histogram object, including for example the error in frequency *f* at each bean as *sqrt(f)*.
 
-**print_hist** and **read_hist** functions save and read the original and normalized histogram with its respective errors in a file under the `spectra` folder.
+**print_hist()** and **read_hist()** save and read the original and normalized histogram with its respective errors in a file under the `spectra` folder.
 
 ### fitting.py
 
 Contains the implementation of models for gaussian and linear functions as required by the [`lmfit`](https://pypi.org/project/lmfit/) library.
 
-**Fit_Gauss_plus_bkgd** models a gauss distrbution plus a straight line as background, it takes parameters `x` and `y` as the data to be fitted and `parameters` as a list initial values for the constants to be fitted by `lmfit`.
+**Fit_Gauss_plus_bkgd()** models a gauss distrbution plus a straight line as background, it takes parameters `x` and `y` as the data to be fitted, and `parameters` as a list of initial values for the constants to be fitted by `lmfit`.
 
-**Fit_Line** models a straight line, taking also `x` and `y` as data to fit and `parameters` as initial value constants.
+**Fit_Line()** models a straight line, taking also `x` and `y` as data to fit, and `parameters` as initial value constants.
 
 ## Specifying peaks to fit
 
-**calibration.json** contains all the information that tells each program which isotopes, what energies and what initial fitting values are going to be used. This is a short example of the sintax used.
+**calibration.json** contains all the information that tells each program what isotopes, energies, and initial fitting values are going to be used. This is a short example of the sintax used.
 ```yaml
 {
-    "prefixes": [//list of isotopes meassured with the same oscil setup
+    "prefixes": [//list of isotopes meassured with the same oscilloscope setup
         "Ba133"
     ],
     "prefix_bkgd": "bkgd", //prefix of background file
-    "peak_dict": { //dictionary containing peaks to be fitted aranged by isotope
+    "peak_dict": { //dictionary containing peaks to be fitted arranged by isotope
         "Ba133": {
             "31 keV": {
-                "range": [ //range on x axis (channels) to use for fitting
+                "range": [ //range on x axis to use for fitting
                     0,
                     3
                 ],
@@ -79,7 +79,7 @@ Contains the implementation of models for gaussian and linear functions as requi
                     "mu": 1.88,
                     "sigma": 0.4
                 },
-                "fit_results": { //saved results from last fit performed
+                "fit_results": { //saved results from last fit performed [value, error]
                     "a0": [
                         -3.1623471965320507,
                         6.695604200475429
