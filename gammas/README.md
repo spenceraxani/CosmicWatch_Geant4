@@ -1,10 +1,10 @@
 # Data acquisition
 
-There are two main ways to obtain data from the Rohde&Schwarz RTO 6 Series oscilloscope in order to create the spectra 1. Save the acquired waveforms history in a binary file and 2. Meassure the area under each waveform directly in the oscilloscope. Each method requires different processing of the obtained data. This README aims to explain the beamline used in each case.
+There are two main ways to obtain data from the Rohde&Schwarz RTO 6 Series oscilloscope in order to create the spectra [1.](#waveform-histories) Save the acquired waveforms history in a binary file and [2.](#direct-measurement) Meassure the area under each waveform directly in the oscilloscope. Each method requires different processing of the obtained data. This README aims to explain the beamline used in each case.
 
 ## Waveform histories
 
-This method requires a large amount of data due to the fact that each acquisition is saved in the same binary file, which can get very heavy. We do not know the maximum number of aqcuisitions the oscilloscope can output. For example `Ba133-live-history.Wfm.bin` has the data of only 5 minutes of measutement and weights **8.7 GB** for 217111 acquisitions. This is not good unless really detailed processing of the waveforms needs to be implemented; however, as we have found, the oscilloscope gives very accurate measurements when it commes to pulse area which, is the focuse of this project.
+This method requires a large amount of data due to the fact that each acquisition is saved in the same binary file, which can get very heavy. We do not know the maximum number of aqcuisitions the oscilloscope can output. For example `Ba133-live-history.Wfm.bin` has the data of only 5 minutes of measutement and weights **8.7 GB** for 217111 acquisitions. This is not good unless really detailed processing of the waveforms needs to be implemented; however, as we have found, the oscilloscope gives very accurate measurements when it commes to pulse area which, is the focuse of this project, we suggest then the approach mentioned in [Direct Measurement](#direct-measurement) section.
 
 ### getStartPoint.py
 
@@ -18,7 +18,7 @@ Uses the start point and DC offset average data obtained with **getStartPoint.py
 
 Reads the amplitud and area information created with **getAreas.py** and creates a `Histogram` object to save the spectra under the `spectra` folder.
 
-## Direct meassurement
+## Direct measurement
 
 ### oscilloscope.py
 
