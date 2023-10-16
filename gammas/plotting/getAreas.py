@@ -62,8 +62,8 @@ else:
 	quit()
 
 #read saved signal start points and offset average
-starts = np.genfromtxt('../data/Waveform_data/'+prefix+'-startPoints.txt', dtype=int, skip_header=1)
-averages = np.genfromtxt('../data/Waveform_data/'+prefix+'-averages.txt', dtype=float, skip_header=1)
+starts = np.genfromtxt('../data/Waveform_histories/Waveform_data/'+prefix+'-startPoints.txt', dtype=int, skip_header=1)
+averages = np.genfromtxt('../data/Waveform_histories/Waveform_data/'+prefix+'-averages.txt', dtype=float, skip_header=1)
 
 for i in range(tot_iterations):
 	y, x, S, nNofAvailableAcq = RTxReadBin('../data/Waveform_histories/'+prefix+'-history.Wfm.bin', acquisitions=[first,last])
@@ -121,7 +121,7 @@ for i in range(tot_iterations):
 	last = first+dw+1
 
 if action=='amplitude' or action=='both':
-	np.savetxt('../data/Waveform_data/'+prefix+'-amplitudes.txt', amplitudes, delimiter=',', header='V')
+	np.savetxt('../data/Waveform_histories/Waveform_data/'+prefix+'-amplitudes.txt', amplitudes, delimiter=',', header='V')
 
 	#plot one random waveform
 	plt.plot(x[idxmin:]*1e6, plot_data[idxmin:]*1e3)
@@ -135,10 +135,10 @@ if action=='amplitude' or action=='both':
 	plt.ylabel(r'SiPM Voltage [mV]')
 
 	plt.legend()
-	plt.savefig('../figures/'+prefix+'-RandomSignal.pdf', bbox_inches="tight")
+	plt.savefig('../figures/Random_Signals/'+prefix+'-RandomSignal.pdf', bbox_inches="tight")
 
 if action=='area' or action=='both':
-	np.savetxt('../data/Waveform_data/'+prefix+'-areas.txt', areas, delimiter=',', header='Vs')
+	np.savetxt('../data/Waveform_histories/Waveform_data/'+prefix+'-areas.txt', areas, delimiter=',', header='Vs')
 	
 	'''#plot one test waveform
 	tot_tests = len(plot_test_data)

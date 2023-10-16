@@ -4,17 +4,19 @@ There are two main ways to obtain data from the Rohde&Schwarz RTO 6 Series oscil
 
 ## Waveform histories
 
+This method requires a large amount of data due to the fact that each acquisition is saved in the same binary file, which can get very heavy. We do not know the maximum number of aqcuisitions the oscilloscope can output. For example `Ba133-live-history.Wfm.bin` has the data of only 5 minutes of measutement and weights **8.7 GB** for 217111 acquisitions. This is not good unless really detailed processing of the waveforms needs to be implemented; however, as we have found, the oscilloscope gives very accurate measurements when it commes to pulse area which, is the focuse of this project.
+
 ### getStartPoint.py
 
-Get the start point and DC offset average for every acquisition from a `history.bin` file obtained from the oscilloscope.
+Get the start point and DC offset average for every acquisition from a `history.bin` file obtained from the oscilloscope. This program will also save a plot under `figures/Random_Signals` of a randomly chosen acquisition to show that the waveform start and DC offset level are being calculated correctly.
 
-### ReadWaveforms.py
+### getAreas.py
 
 Uses the start point and DC offset average data obtained with **getStartPoint.py** to measure the amplitude and area of each acquisition. This information is saved under the `Waveform_data` folder.
 
 ### createSpectra.py
 
-Reads the amplitud and area information created with **ReadWaveforms.py** and creates a `Histogram` object to save the spectra under the `spectra` folder.
+Reads the amplitud and area information created with **getAreas.py** and creates a `Histogram` object to save the spectra under the `spectra` folder.
 
 ## Direct meassurement
 

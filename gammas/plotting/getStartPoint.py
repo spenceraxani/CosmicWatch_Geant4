@@ -133,4 +133,4 @@ plt.xlabel(r'Time [$\mu$s]')
 plt.ylabel(r'SiPM Voltage [mV]')
 
 plt.legend()
-plt.savefig('../figures/'+prefix+'-RandomSignal.pdf', bbox_inches="tight")
+plt.savefig('../figures/Random_Signals/'+prefix+'-RandomSignal.pdf', bbox_inches="tight")

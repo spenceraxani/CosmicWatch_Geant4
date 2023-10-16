@@ -7,8 +7,8 @@ prefixes = ['Na22-live', 'Cs137-live']
 prefix_bkgd = 'bkgd-live'
 
 #read background
-maxvalues_bkgd = np.genfromtxt('../data/Waveform_data/'+prefix_bkgd+'-amplitudes.txt', dtype=float, skip_header=1)
-areas_bkgd= np.genfromtxt('../data/Waveform_data/'+prefix_bkgd+'-areas.txt', dtype=float, skip_header=1)
+maxvalues_bkgd = np.genfromtxt('../data/Waveform_histories/Waveform_data/'+prefix_bkgd+'-amplitudes.txt', dtype=float, skip_header=1)
+areas_bkgd= np.genfromtxt('../data/Waveform_histories/Waveform_data/'+prefix_bkgd+'-areas.txt', dtype=float, skip_header=1)
 
 #read data
 maxvalues = {prefix: np.array([0]) for prefix in prefixes}
@@ -28,8 +28,8 @@ min_area = 0
 
 #----------read data----------#
 for prefix in prefixes:
-	maxvalues[prefix] = np.genfromtxt('../data/Waveform_data/'+prefix+'-amplitudes.txt', dtype=float, skip_header=1)
-	areas[prefix] = np.genfromtxt('../data/Waveform_data/'+prefix+'-areas.txt', dtype=float, skip_header=1)
+	maxvalues[prefix] = np.genfromtxt('../data/Waveform_histories/Waveform_data/'+prefix+'-amplitudes.txt', dtype=float, skip_header=1)
+	areas[prefix] = np.genfromtxt('../data/Waveform_histories/Waveform_data/'+prefix+'-areas.txt', dtype=float, skip_header=1)
 	#areas = np.concatenate((areas, temp))
 
 	#erasing 0 areas and maxvalues.
@@ -82,7 +82,7 @@ spectrum_bkgd = hmc.Histogram(prefix_bkgd, dx*1e9, bin_edges, freq_bkgd)
 spectrum_bkgd.normalize(max_freq_area, np.sqrt(max_freq_area))
 
 spectrum_bkgd.getErrors()
-spectrum_bkgd.print_hist(f_name='../data/spectra/'+prefix_bkgd+'-spectrum.txt')
+spectrum_bkgd.print_hist(f_name='../data/Waveform_histories/spectra/'+prefix_bkgd+'-spectrum.txt')
 
 for prefix in prefixes:
 	#----------statistics----------#
@@ -91,4 +91,4 @@ for prefix in prefixes:
 	#spectrums[prefix].getMean()
 	#spectrums[prefix].getSigma()
 	spectrums[prefix].getErrors()
-	spectrums[prefix].print_hist(f_name='../data/spectra/'+prefix+'-spectrum.txt')
+	spectrums[prefix].print_hist(f_name='../data/Waveform_histories/spectra/'+prefix+'-spectrum.txt')
