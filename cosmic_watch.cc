@@ -47,7 +47,7 @@ int main(int argc, char** argv){
 		std::stringstream x;
 		std::stringstream y;
 
-		G4int range = 48;
+		/*G4int range = 48;
 		for(G4int i = -range; i <= range; i+=2){
 			for(G4int j = -range; j <= range; j+=2){
 				x << i;
@@ -55,7 +55,7 @@ int main(int argc, char** argv){
 				UImanager->ApplyCommand("/gps/pos/centre "+x.str()+" "+y.str()+" 5 mm");
 				UImanager->ApplyCommand("/run/beamOn 1");
 			}
-		} 
+		}*/ 
 	}
 
 	delete runManager;

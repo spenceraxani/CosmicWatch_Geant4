@@ -1,0 +1,22 @@
+#class tools::wcsv::ntuple
+#title Event
+#separator 44
+#vector_separator 59
+#column int Event
+#column double Tot - OpAbs
+#column double Cerenkov
+#column double CoupledT
+#column double eIon
+#column double msc
+#column double OpAbs
+#column double Phot
+5,0,0,0,0,0,0,0
+6,0,0,0,0,0,0,0
+7,0,0,0,0,0,0,0
+8,0,0,0,0,0,0,0
+9,0,0,0,0,0,0,0
+25,0,0,0,0,0,0,0
+26,0,0,0,0,0,0,0
+27,0,0,0,0,0,0,0
+28,225.387,0,106.653,0,48.0545,0,332.041
+29,259.453,0,101.526,0,52.0785,0,360.979

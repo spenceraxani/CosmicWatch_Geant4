@@ -8,7 +8,15 @@ MyRunAction::MyRunAction()
 	//Create ntuple
 	man->CreateNtuple("Event", "Event");
 	man->CreateNtupleIColumn("Event");
-	man->CreateNtupleDColumn("E");
+	man->CreateNtupleDColumn("Tot - OpAbs");
+	man->CreateNtupleDColumn("Cerenkov");
+	man->CreateNtupleDColumn("compt");
+	man->CreateNtupleDColumn("CoupledTransportation");
+	man->CreateNtupleDColumn("eBrem");
+	man->CreateNtupleDColumn("eIon");
+	man->CreateNtupleDColumn("msc");
+	man->CreateNtupleDColumn("OpAbsorption");
+	man->CreateNtupleDColumn("phot");
 	man->FinishNtuple(0);
 }
 

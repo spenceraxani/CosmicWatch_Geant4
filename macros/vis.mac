@@ -22,20 +22,20 @@
 /gps/direction 0 0 -1
 /gps/pos/centre 0 0 5 cm
 /gps/ene/type Mono
-/gps/ene/mono 662 keV
+/gps/ene/mono 5 keV
 
 #define scoring mesh
-/score/create/boxMesh SiPM
-/score/mesh/boxSize 1.5 1.5 0.5 mm
-/score/mesh/nBin 1 1 1
-/score/mesh/translate/xyz 0. 0. -0.55 cm
+#/score/create/boxMesh SiPM
+#/score/mesh/boxSize 1.5 1.5 0.5 mm
+#/score/mesh/nBin 1 1 1
+#/score/mesh/translate/xyz 0. 0. -0.55 cm
 
 #adding particle filters and quantity measutements
-/score/quantity/energyDeposit eDep MeV
-#/score/filter/particle opticalPhotonFilter opticalPhoton
-/score/quantity/nOfStep nOfStepGamma
-/score/filter/particle gammaFilter gamma
-/score/close
+#/score/quantity/energyDeposit eDep MeV
+##/score/filter/particle opticalPhotonFilter opticalPhoton
+#/score/quantity/nOfStep nOfStepGamma
+#/score/filter/particle gammaFilter gamma
+#/score/close
 
 #decorative text
 /vis/scene/add/text2D 0.6 -.9 24 ! ! CosmicWatch

@@ -3,9 +3,9 @@
 
 #general particle source
 /gps/particle gamma
-/gps/pos/centre 0 0 -1 cm
 /gps/direction 0 0 -1
+/gps/pos/centre 0 0 5 cm
 /gps/ene/type Mono
-/gps/ene/mono 1 keV
+/gps/ene/mono 662 keV
 
-/run/beamOn 100
+/run/beamOn 100000
