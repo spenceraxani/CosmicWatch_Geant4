@@ -32,7 +32,7 @@ void MyRunAction::BeginOfRunAction(const G4Run* run)
 	strRunID << runID;
 
 	G4AnalysisManager* man = G4AnalysisManager::Instance();
-	man->OpenFile("../data/run"+strRunID.str()+".csv");
+	man->OpenFile("../data/100000events_run"+strRunID.str()+".csv");
 }
 
 void MyRunAction::EndOfRunAction(const G4Run*)

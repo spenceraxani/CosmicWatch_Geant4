@@ -8,4 +8,6 @@
 /gps/ene/type Mono
 /gps/ene/mono 662 keV
 
+#/run/particle/dumpOrderingParam
+
 /run/beamOn 100000

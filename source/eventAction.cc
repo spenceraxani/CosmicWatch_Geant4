@@ -45,14 +45,14 @@ void MyEventAction::EndOfEventAction(const G4Event* event)
 
 	G4AnalysisManager* man = G4AnalysisManager::Instance();
 	man->FillNtupleIColumn(0, 0, eventID);
-	man->FillNtupleDColumn(0, 1, fCerenkovEdep/keV);
-	man->FillNtupleDColumn(0, 2, fComptEdep/keV);
-	man->FillNtupleDColumn(0, 3, fCoupledTEdep/keV);
-	man->FillNtupleDColumn(0, 4, feBremEdep/keV);
-	man->FillNtupleDColumn(0, 5, feIoniEdep/keV);
-	man->FillNtupleDColumn(0, 6, fMSCEdep/keV);
-	man->FillNtupleDColumn(0, 7, fOpAbsorptionEdep/keV);
-	man->FillNtupleDColumn(0, 8, fPhotEdep/keV);
-	man->FillNtupleDColumn(0, 9, fEdep/keV);
+	man->FillNtupleDColumn(0, 1, fEdep/keV);
+	man->FillNtupleDColumn(0, 2, fCerenkovEdep/keV);
+	man->FillNtupleDColumn(0, 3, fComptEdep/keV);
+	man->FillNtupleDColumn(0, 4, fCoupledTEdep/keV);
+	man->FillNtupleDColumn(0, 5, feBremEdep/keV);
+	man->FillNtupleDColumn(0, 6, feIoniEdep/keV);
+	man->FillNtupleDColumn(0, 7, fMSCEdep/keV);
+	man->FillNtupleDColumn(0, 8, fOpAbsorptionEdep/keV);
+	man->FillNtupleDColumn(0, 9, fPhotEdep/keV);
 	man->AddNtupleRow(0);
 }

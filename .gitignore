@@ -5,3 +5,4 @@
 #binary files
 gammas/data/Waveform_histories/*.bin
 
+*.vscode

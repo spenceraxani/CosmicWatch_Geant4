@@ -41,6 +41,9 @@ void MySteppingAction::UserSteppingAction(const G4Step* step)
 
 		G4double edep = step->GetTotalEnergyDeposit();
 
+		G4int subtype = post_step-> GetProcessSubType();
+ 		G4int nbsec = step->GetNumberOfSecondariesInCurrentStep();
+
 		if (edep > 0){
 
 			if (processName_post=="Cerenkov"){
@@ -68,7 +71,12 @@ void MySteppingAction::UserSteppingAction(const G4Step* step)
 			else if (processName_post=="phot"){
 				fEventAction->AddPhotEdep(edep);
 				//G4cout << pName << "\t" << processName_pre << "\t" << processName_post << "\t" << edep/keV << G4endl;
+				G4int subtype = post_step-> GetProcessSubType();
+				G4cout << subtype << G4endl;
 			}
+			//else if ((subtype == 2)&&(nbsec == 0)){
+			//	fEventAction->AddEdepAlone(edep);
+			//}
 			else {
 				G4cout << processName_post << "\t" << edep/keV << "\t" << G4endl;
 			}
