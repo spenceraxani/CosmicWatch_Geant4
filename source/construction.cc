@@ -3,6 +3,15 @@
 MyDetectorConstruction::MyDetectorConstruction()
 {
 	DefineMaterials();
+
+	if (SiPMpos == "base"){
+		SiPMsize = G4ThreeVector(SiPMBase/2., SiPMBase/2., SiPMHeight/2.);
+		SiPMplacement = G4ThreeVector(0., 0., -5.5*mm);
+	}
+	else{
+		SiPMsize = G4ThreeVector(SiPMHeight/2., SiPMBase/2., SiPMBase/2.);
+		SiPMplacement = G4ThreeVector(25.5*mm, 0., 0.);
+	}
 }
 
 MyDetectorConstruction::~MyDetectorConstruction()
@@ -63,38 +72,77 @@ void MyDetectorConstruction::DefineMaterials()
 	PScintMat->SetMaterialPropertiesTable(mptPScint);
 
 	//mirror coating for scintillators
-	mirrorCoat = new G4OpticalSurface("mirrorCoat");
+	mirrorCoatPScint = new G4OpticalSurface("mirrorCoatPScint");
 
-	mirrorCoat->SetType(dielectric_metal);
-	mirrorCoat->SetFinish(ground);
-	mirrorCoat->SetModel(unified);
+	mirrorCoatPScint->SetType(dielectric_metal);
+	mirrorCoatPScint->SetFinish(ground);
+	mirrorCoatPScint->SetModel(unified);
 
-	std::vector<G4double> reflectivity = {1.0, 1.0};
+	std::vector<G4double> reflectivityPSinct = {1.0, 1.0};
 
-	G4MaterialPropertiesTable *mptMirror = new G4MaterialPropertiesTable();
-	mptMirror->AddProperty("REFLECTIVITY", energy, reflectivity);
+	G4MaterialPropertiesTable *mptMirrorPSinct = new G4MaterialPropertiesTable();
+	mptMirrorPSinct->AddProperty("REFLECTIVITY", energy, reflectivityPSinct);
+	
+	mirrorCoatPScint->SetMaterialPropertiesTable(mptMirrorPSinct);
 
-	mirrorCoat->SetMaterialPropertiesTable(mptMirror);
+	//mirror coating for SiPM
+	mirrorCoatSiPM = new G4OpticalSurface("mirrorCoatSiPM");
+
+	mirrorCoatSiPM->SetType(dielectric_dielectric);
+	mirrorCoatSiPM->SetFinish(groundfrontpainted);
+	mirrorCoatSiPM->SetModel(unified);
+
+	std::vector<G4double> reflectivitySiPM = {0.0, 0.0};
+
+	G4MaterialPropertiesTable *mptMirrorSiPM = new G4MaterialPropertiesTable();
+	mptMirrorSiPM->AddProperty("REFLECTIVITY", energy, reflectivitySiPM);
+
+	mirrorCoatSiPM->SetMaterialPropertiesTable(mptMirrorSiPM);
+
+	//Optica boundary between Scintillator and SiPM
+	opBoundary = new G4OpticalSurface("Boundary");
+
+	opBoundary->SetType(dielectric_dielectric);
+	opBoundary->SetFinish(Rough_LUT);
+	opBoundary->SetModel(unified);
 }
 
 void MyDetectorConstruction::BuildPlasticScint()
 {
+	//-------------Volumes-------------//
 	//scintillator
 	solidPScint = new G4Box("solidPScint", PScintBase/2., PScintBase/2., PScintHeight/2.);
 	logicPScint = new G4LogicalVolume(solidPScint, PScintMat, "logicPScint");
 	physPScint = new G4PVPlacement(0, G4ThreeVector(0., 0., 0.),
 		logicPScint, "physPScint", logicWorld, false, 0, true);
 
-	//reflective surface
-	G4LogicalSkinSurface *skin = new G4LogicalSkinSurface("skin", logicPScint, mirrorCoat);
+	//SiPM
+	solidSiPM = new G4Box("solidSiPM", SiPMsize[0], SiPMsize[1], SiPMsize[2]);
+	logicSiPM = new G4LogicalVolume(solidSiPM, Air, "logicSiPM");
+	physSiPM = new G4PVPlacement(0, SiPMplacement,
+		logicSiPM, "physSiPM", logicWorld, false, 0, true);
 
-	fScoringVolume = logicPScint;
+	//-------------Optical surfaces-------------//
+	//reflective surface (air, scintillator)
+	G4LogicalSkinSurface *skin = new G4LogicalSkinSurface("skin", logicPScint, mirrorCoatPScint);
+	//opaque surface (air, SiPM)
+	G4LogicalSkinSurface *skinSiPM = new G4LogicalSkinSurface("skinSiPM", logicSiPM, mirrorCoatSiPM);
+	//transparent surface (scintillator, SiPM)
+	G4LogicalBorderSurface* SiPMSurface = new G4LogicalBorderSurface("SiPMSurface", physPScint, physSiPM, opBoundary);
 
 	auto visAttributes = new G4VisAttributes(G4Colour(0, 0, 255, 0.3));
 	visAttributes->SetVisibility(true);
 	visAttributes->SetForceSolid(true);
 	logicPScint->SetVisAttributes(visAttributes);
 	fVisAttributes.push_back(visAttributes);
+
+	visAttributes = new G4VisAttributes(G4Colour(0, 0, 0, 0.3));
+	visAttributes->SetVisibility(true);
+	visAttributes->SetForceSolid(true);
+	logicSiPM->SetVisAttributes(visAttributes);
+	fVisAttributes.push_back(visAttributes);
+
+	fScoringVolume = logicSiPM;
 }
 
 G4VPhysicalVolume* MyDetectorConstruction::Construct()
@@ -120,8 +168,8 @@ void MyDetectorConstruction::ConstructSDandField()
 {
 	MySensitiveDetector *sensDet = new MySensitiveDetector("sensitiveDetector");
 
-	if(logicPScint != NULL)
+	if(fScoringVolume != NULL)
 	{
-		logicPScint->SetSensitiveDetector(sensDet);
+		fScoringVolume->SetSensitiveDetector(sensDet);
 	}
 }

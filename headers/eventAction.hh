@@ -25,8 +25,10 @@ public:
 	void AddeBremEdep (G4double edep){feBremEdep+=edep;}
 	void AddeIoniEdep (G4double edep){feIoniEdep+=edep;}
 	void AddMSCEdep(G4double edep){fMSCEdep+=edep;}
+	void AddmuIoniEdep(G4double edep){fmuIoniEdep+=edep;}
 	void AddOpAbsEdep (G4double edep){fOpAbsorptionEdep+=edep;}
 	void AddPhotEdep (G4double edep){fPhotEdep+=edep;}
+	void AddPhoton (){fNumberOfOpticalPhotons+=1;}
 
 private:
 	G4double fEdep;
@@ -37,8 +39,10 @@ private:
 	G4double feBremEdep;
 	G4double feIoniEdep;
 	G4double fMSCEdep;
+	G4double fmuIoniEdep;
 	G4double fOpAbsorptionEdep;
 	G4double fPhotEdep;
+	G4int fNumberOfOpticalPhotons;
 };
 
 #endif

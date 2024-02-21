@@ -37,5 +37,8 @@
 #/score/filter/particle gammaFilter gamma
 #/score/close
 
+#/score/create/realWorldLogVol logicSiPM
+#/score/close
+
 #decorative text
 /vis/scene/add/text2D 0.6 -.9 24 ! ! CosmicWatch

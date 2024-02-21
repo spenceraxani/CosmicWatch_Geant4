@@ -2,12 +2,12 @@
 /run/initialize
 
 #general particle source
-/gps/particle gamma
+/gps/particle mu-
 /gps/direction 0 0 -1
 /gps/pos/centre 0 0 5 cm
 /gps/ene/type Mono
-/gps/ene/mono 662 keV
+/gps/ene/mono 4 GeV
 
 #/run/particle/dumpOrderingParam
 
-/run/beamOn 100000
+/run/beamOn 1000

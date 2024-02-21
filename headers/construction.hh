@@ -11,6 +11,7 @@
 #include "G4SystemOfUnits.hh"
 
 #include "G4OpticalSurface.hh"
+#include "G4LogicalBorderSurface.hh"
 #include "G4LogicalSkinSurface.hh"
 
 #include "G4VisAttributes.hh"
@@ -33,7 +34,7 @@ public:
 private:
 	//build materials
 	void DefineMaterials();
-	//build plastic scintillator
+	//build plastic scintillator and SiPM
 	void BuildPlasticScint();
 	//build sensitive detector
 	void ConstructSDandField();
@@ -47,12 +48,19 @@ private:
 	G4double PScintBase = 50.*mm;
 	G4double PScintHeight = 10.*mm;
 
-	G4Box *solidWorld, *solidPScint;
-	G4LogicalVolume *logicWorld, *logicPScint;
-	G4VPhysicalVolume *physWorld, *physPScint;
+	//SiPM
+	G4String SiPMpos = "side"; //"base" or "side"
+	G4ThreeVector SiPMsize, SiPMplacement;
+
+	G4double SiPMBase = 3.*mm;
+	G4double SiPMHeight = 1.*mm;
+
+	G4Box *solidWorld, *solidPScint, *solidSiPM;
+	G4LogicalVolume *logicWorld, *logicPScint, *logicSiPM;
+	G4VPhysicalVolume *physWorld, *physPScint, *physSiPM;
 
 	//reflective scintillator surface
-	G4OpticalSurface *mirrorCoat;
+	G4OpticalSurface *mirrorCoatPScint, *mirrorCoatSiPM, *opBoundary;
 
 	//Materials
 	G4Material *Air, *PScintMat;

@@ -15,9 +15,15 @@ MyRunAction::MyRunAction()
 	man->CreateNtupleDColumn("eBrem");
 	man->CreateNtupleDColumn("eIon");
 	man->CreateNtupleDColumn("msc");
+	man->CreateNtupleDColumn("muIoni");
 	man->CreateNtupleDColumn("OpAbsorption");
 	man->CreateNtupleDColumn("phot");
-	man->FinishNtuple(0);
+	man->CreateNtupleIColumn("NOfOptPhotons");
+	man->FinishNtuple();
+
+	//man->CreateNtuple("NOfOptPhotons", "NOfOptPhotons");
+	//man->CreateNtupleIColumn("NOfOptPhotons");
+	//man->FinishNtuple();
 }
 
 MyRunAction::~MyRunAction()
@@ -32,7 +38,13 @@ void MyRunAction::BeginOfRunAction(const G4Run* run)
 	strRunID << runID;
 
 	G4AnalysisManager* man = G4AnalysisManager::Instance();
-	man->OpenFile("../data/100000events_run"+strRunID.str()+".csv");
+
+	//man->SetNtupleFileName(0, "../data/run"+strRunID.str()+".csv");
+	//man->SetNtupleFileName(1, "../data/run"+strRunID.str()+"_SiPMHits.csv");
+	//man->OpenFile("../data/run"+strRunID.str()+".csv");
+	//man->OpenFile("../data/run"+strRunID.str()+"_SiPMHits.csv");
+	//man->Reset();
+	man->OpenFile("../data/run"+strRunID.str()+"-side.csv");
 }
 
 void MyRunAction::EndOfRunAction(const G4Run*)
