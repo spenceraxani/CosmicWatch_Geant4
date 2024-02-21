@@ -46,5 +46,6 @@ def merge(runs=1, threads=1, columns=1, f_template="../data/100000events_run0_nt
 
 		data_frames[run] = df
 
-		df.to_csv("../data/merged_100000events_run"+str(run)+".csv")
+		save_file = re.sub("_t.*?\.", ".", f_template)
+		df.to_csv(save_file)
 	return data_frames
