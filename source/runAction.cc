@@ -44,7 +44,7 @@ void MyRunAction::BeginOfRunAction(const G4Run* run)
 	//man->OpenFile("../data/run"+strRunID.str()+".csv");
 	//man->OpenFile("../data/run"+strRunID.str()+"_SiPMHits.csv");
 	//man->Reset();
-	man->OpenFile("../data/run"+strRunID.str()+"-side.csv");
+	man->OpenFile("../data/run"+strRunID.str()+"-base.csv");
 }
 
 void MyRunAction::EndOfRunAction(const G4Run*)

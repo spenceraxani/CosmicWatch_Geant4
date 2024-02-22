@@ -20,6 +20,10 @@
 #general particle source
 /gps/particle gamma
 /gps/direction 0 0 -1
+/gps/pos/type Plane
+/gps/pos/shape Square
+/gps/pos/halfx 24 mm
+/gps/pos/halfy 24 mm
 /gps/pos/centre 0 0 5 cm
 /gps/ene/type Mono
 /gps/ene/mono 5 keV

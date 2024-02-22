@@ -49,7 +49,7 @@ private:
 	G4double PScintHeight = 10.*mm;
 
 	//SiPM
-	G4String SiPMpos = "side"; //"base" or "side"
+	G4String SiPMpos = "base"; //"base" or "side"
 	G4ThreeVector SiPMsize, SiPMplacement;
 
 	G4double SiPMBase = 3.*mm;
