@@ -7,79 +7,101 @@ runs = int(input("enter number of runs: "))
 threads = int(input("enter number of threads: "))
 columns = int(input("enter number of columns: "))
 
-#merge data in imput files
-f_template = "../data/run0-side_nt_Event_t0.csv"
-
 from merge_threads import merge
-data_frames = merge(runs, threads, columns, f_template)
 
-Events = len(data_frames[0].index)
+#merge data in imput files
+f_templates = ["../data/run0-side_nt_Event_t0.csv", "../data/run0-base_nt_Event_t0.csv"]
 
-print("Tot events =", Events)
+fig1, ax1 = plt.subplots()
+fig2, ax2 = plt.subplots()
 
-data_frames[0] = data_frames[0].eval('Sum = Cerenkov+compt+CoupledTransportation+eBrem+eIon+msc+muIoni+phot')
+ax1.grid()
+ax1.set_title(label="energy deposition")
+ax1.set_xlabel("Energy [keV]")
+ax1.set_ylabel("Counts")
 
-def err(row):
-    return np.abs(row.Tot-row.Sum)/row.Tot
+ax2.grid()
+ax2.legend()
+ax2.set_title("photon count")
+ax2.set_xlabel("No of photons")
+ax2.set_ylabel("Counts")
 
-diff_list  = [(t-s)/t if t>0 else 0 for t, s in zip(data_frames[0]["Tot"], data_frames[0]["Sum"])]
+for f_template in f_templates:
+    
+    placement = None
+    if "base" in f_template:
+        placement = "base"
+    elif "side" in f_template:
+        placement = "side"
 
-data_frames[0]["Diff"] = diff_list
-#data_frames[0]["Diff"] = data_frames[0].apply(err, axis=1) 
-#data_frames[0] = data_frames[0].eval('Diff = (Tot - Sum)/Tot') 
+    data_frames = merge(runs, threads, columns, f_template)
 
-print(data_frames[0]["Diff"])
+    Events = len(data_frames[0].index)
 
-counter = 0
-threshold = 0.001
-for e in range(Events):
-    if np.abs(data_frames[0]["Diff"][e]) >= threshold:
-        counter += 1
-        print(e, data_frames[0]["Tot"][e], data_frames[0]["Sum"][e], data_frames[0]["Diff"][e])
+    print("Tot events =", Events)
 
-print(counter, "events have an error greater than", threshold)
+    data_frames[0] = data_frames[0].eval('Sum = Cerenkov+compt+CoupledTransportation+eBrem+eIon+msc+muIoni+phot')
 
-weird_events = data_frames[0].index[data_frames[0]['Tot'] >= 662].tolist()
+    def err(row):
+        return np.abs(row.Tot-row.Sum)/row.Tot
 
-tot_energy = [t for t in data_frames[0]['Tot'] if t>0]
+    diff_list  = [(t-s)/t if t>0 else 0 for t, s in zip(data_frames[0]["Tot"], data_frames[0]["Sum"])]
 
-greatest = max(tot_energy)
-least = min(tot_energy)
+    data_frames[0]["Diff"] = diff_list
+    #data_frames[0]["Diff"] = data_frames[0].apply(err, axis=1) 
+    #data_frames[0] = data_frames[0].eval('Diff = (Tot - Sum)/Tot') 
 
-bin_size = (greatest-least)/1000
+    print(data_frames[0]["Diff"])
 
-bins = np.arange(least, greatest+bin_size, bin_size)
-counts, _ = np.histogram(tot_energy, bins=bins)
+    counter = 0
+    threshold = 0.001
+    for e in range(Events):
+        if np.abs(data_frames[0]["Diff"][e]) >= threshold:
+            counter += 1
+            print(e, data_frames[0]["Tot"][e], data_frames[0]["Sum"][e], data_frames[0]["Diff"][e])
 
-plt.step(bins[:-1], counts, where="mid")
-#plt.axvline(x=477, label="borde Compton", color="orange")
+    print(counter, "events have an error greater than", threshold)
 
-plt.legend()
+    weird_events = data_frames[0].index[data_frames[0]['Tot'] >= 662].tolist()
 
-save_file = re.sub("_t.*?\.", ".", f_template)
+    tot_energy = [t for t in data_frames[0]['Tot'] if t>0]
+
+    greatest = max(tot_energy)
+    least = min(tot_energy)
+
+    bin_size = (greatest-least)/500
+
+    bins = np.arange(least, greatest+bin_size, bin_size)
+    counts, _ = np.histogram(tot_energy, bins=bins)
+
+    ax1.step(bins[:-1], counts, where="mid", label=placement)
+
+    #------------------counting photons------------------#
+    photons = data_frames[0]['NOfOptPhotons']
+    greatest = max(photons)
+    least = min(photons)
+
+    bin_size = (greatest-least)/500
+
+    bins = np.arange(least, greatest+bin_size, bin_size)
+    counts, _ = np.histogram(data_frames[0]['NOfOptPhotons'], bins=bins)
+
+    ax2.step(bins[:-1], counts, where="mid", label=placement)
+
+ax1.legend()
+
+save_file = re.sub("_t.*?\.", ".", f_templates[0])
 save_file = re.sub("/data/", "/figures/", save_file)
-save_file = re.sub("csv", "pdf", save_file)
-plt.savefig(save_file, bbox_inches="tight")
+save_file = re.sub("-side_|-base_", "_", save_file)
+save_file = re.sub(".csv", "_energy_spectra.pdf", save_file)
 
-plt.clf()
+print("saving to:", save_file)
+fig1.savefig(save_file, bbox_inches="tight")
 
-#------------------counting photons------------------#
-photons = data_frames[0]['NOfOptPhotons']
-greatest = max(photons)
-least = min(photons)
-
-bin_size = (greatest-least)/1000
-
-bins = np.arange(least, greatest+bin_size, bin_size)
-counts, _ = np.histogram(data_frames[0]['NOfOptPhotons'], bins=bins)
-
-plt.step(bins[:-1], counts, where="mid")
-#plt.axvline(x=477, label="borde Compton", color="orange")
-
-plt.legend()
-
+save_file = re.sub("_energy_spectra.pdf", ".pdf", save_file)
 save_file = re.sub("\.pdf", "_photon_count.pdf", save_file)
-print(save_file)
-plt.savefig(save_file, bbox_inches="tight")
+    
+print("saving to:", save_file)
+fig2.savefig(save_file, bbox_inches="tight")
 
-plt.clf()
+ax2.legend()
