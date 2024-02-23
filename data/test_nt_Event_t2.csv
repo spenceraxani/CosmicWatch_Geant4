@@ -1,0 +1,17 @@
+#class tools::wcsv::ntuple
+#title Event
+#separator 44
+#vector_separator 59
+#column int Event
+#column double Tot - OpAbs
+#column double Cerenkov
+#column double compt
+#column double CoupledTransportation
+#column double eBrem
+#column double eIon
+#column double msc
+#column double muIoni
+#column double OpAbsorption
+#column double phot
+#column int NOfOptPhotons
+0,0,0,0,0,0,0,0,0,0,0,0
