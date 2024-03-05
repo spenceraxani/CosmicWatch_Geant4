@@ -2,8 +2,9 @@
 
 MyEventAction::MyEventAction(MyRunAction*)
 {
-	fEdep = 0;
+	ParticleMomDir = G4ThreeVector(0., 0., 0.);
 
+	fEdep = 0;
 	fCerenkovEdep = 0;
 	fComptEdep = 0;
 	fCoupledTEdep = 0;
@@ -21,8 +22,9 @@ MyEventAction::~MyEventAction()
 
 void MyEventAction::BeginOfEventAction(const G4Event*)
 {
-	fEdep = 0;
+	ParticleMomDir = G4ThreeVector(0., 0., 0.);
 
+	fEdep = 0;
 	fCerenkovEdep = 0;
 	fComptEdep = 0;
 	fCoupledTEdep = 0;
@@ -49,17 +51,20 @@ void MyEventAction::EndOfEventAction(const G4Event* event)
 
 	G4AnalysisManager* man = G4AnalysisManager::Instance();
 	man->FillNtupleIColumn(0, 0, eventID);
-	man->FillNtupleDColumn(0, 1, fEdep/keV);
-	man->FillNtupleDColumn(0, 2, fCerenkovEdep/keV);
-	man->FillNtupleDColumn(0, 3, fComptEdep/keV);
-	man->FillNtupleDColumn(0, 4, fCoupledTEdep/keV);
-	man->FillNtupleDColumn(0, 5, feBremEdep/keV);
-	man->FillNtupleDColumn(0, 6, feIoniEdep/keV);
-	man->FillNtupleDColumn(0, 7, fmuIoniEdep/keV);
-	man->FillNtupleDColumn(0, 8, fMSCEdep/keV);
-	man->FillNtupleDColumn(0, 9, fOpAbsorptionEdep/keV);
-	man->FillNtupleDColumn(0, 10, fPhotEdep/keV);
-	man->FillNtupleIColumn(0, 11, fNumberOfOpticalPhotons);
+	man->FillNtupleDColumn(0, 1, ParticleMomDir[0]);
+	man->FillNtupleDColumn(0, 2, ParticleMomDir[1]);
+	man->FillNtupleDColumn(0, 3, ParticleMomDir[2]);
+	man->FillNtupleDColumn(0, 4, fEdep/keV);
+	man->FillNtupleDColumn(0, 5, fCerenkovEdep/keV);
+	man->FillNtupleDColumn(0, 6, fComptEdep/keV);
+	man->FillNtupleDColumn(0, 7, fCoupledTEdep/keV);
+	man->FillNtupleDColumn(0, 8, feBremEdep/keV);
+	man->FillNtupleDColumn(0, 9, feIoniEdep/keV);
+	man->FillNtupleDColumn(0, 10, fmuIoniEdep/keV);
+	man->FillNtupleDColumn(0, 11, fMSCEdep/keV);
+	man->FillNtupleDColumn(0, 12, fOpAbsorptionEdep/keV);
+	man->FillNtupleDColumn(0, 13, fPhotEdep/keV);
+	man->FillNtupleIColumn(0, 14, fNumberOfOpticalPhotons);
 	man->AddNtupleRow(0);
 
 	G4cout << "finished event " << eventID << G4endl;

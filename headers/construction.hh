@@ -45,8 +45,9 @@ private:
 	G4double hWorld = 20.*cm;
 
 	//Plastic scintillator
-	G4double PScintBase = 50.*mm;
-	G4double PScintHeight = 10.*mm;
+	G4double PScintXBase = 50.*mm; //100 or 50
+	G4double PScintYBase = 50.*mm; //50 or 50
+	G4double PScintHeight = 10.*mm; //20 or 10
 
 	//SiPM
 	G4String SiPMpos = "base"; //"base" or "side"

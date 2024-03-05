@@ -8,6 +8,9 @@ MyRunAction::MyRunAction()
 	//Create ntuple
 	man->CreateNtuple("Event", "Event");
 	man->CreateNtupleIColumn("Event");
+	man->CreateNtupleDColumn("Px");
+	man->CreateNtupleDColumn("Py");
+	man->CreateNtupleDColumn("Pz");
 	man->CreateNtupleDColumn("Tot - OpAbs");
 	man->CreateNtupleDColumn("Cerenkov");
 	man->CreateNtupleDColumn("compt");
@@ -44,8 +47,8 @@ void MyRunAction::BeginOfRunAction(const G4Run* run)
 	//man->OpenFile("../data/run"+strRunID.str()+".csv");
 	//man->OpenFile("../data/run"+strRunID.str()+"_SiPMHits.csv");
 	//man->Reset();
-	//man->OpenFile("../data/run"+strRunID.str()+"-base.csv");
-	man->OpenFile("../data/test.csv");
+	man->OpenFile("../data/run"+strRunID.str()+"-ang_dis.csv");
+	//man->OpenFile("../data/test.csv");
 }
 
 void MyRunAction::EndOfRunAction(const G4Run*)

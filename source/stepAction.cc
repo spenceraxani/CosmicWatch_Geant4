@@ -27,15 +27,24 @@ void MySteppingAction::UserSteppingAction(const G4Step* step)
 	G4LogicalVolume *fScoringVolume = detectorConstruction->GetScoringVolume();
 	G4String ScoringVolName = fScoringVolume->GetName();
 
+	//Particle Track
+	G4Track *track = step->GetTrack();
+
+	//get primatry particle incident direction
+	if(track->GetCurrentStepNumber()==1 && track->GetTrackID()==1)
+	{
+		const G4ThreeVector ParticleMomDir = track->GetMomentumDirection();
+		fEventAction->SetParticleMomDir(ParticleMomDir);
+	}
+
 	//Particle name
 	const G4ParticleDefinition* particle = step->GetTrack()->GetDefinition();
 	//const G4String pName = particle->GetParticleName();
 
+	//count number of photons reaching SiPM
 	if(particle==G4OpticalPhoton::OpticalPhotonDefinition() && currentVolume==fScoringVolume){
-		G4Track *track = step->GetTrack();
-
-		G4int id = track->GetTrackID();
-		G4int idP = track->GetParentID();
+		//G4int id = track->GetTrackID();
+		//G4int idP = track->GetParentID();
 		track->SetTrackStatus(fStopAndKill);
 
 		//G4cout << "optical photon in SiPM\t" << id << "\t" << idP << G4endl;

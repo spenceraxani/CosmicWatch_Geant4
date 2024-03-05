@@ -17,6 +17,8 @@ public:
 	virtual void BeginOfEventAction(const G4Event*);
 	virtual void EndOfEventAction(const G4Event* event);
 
+	void SetParticleMomDir(G4ThreeVector momDir){ParticleMomDir=momDir;}
+
 	void AddEdep(G4double edep){fEdep+=edep;}
 
 	void AddCerenkovEdep(G4double edep){fCerenkovEdep+=edep;}
@@ -31,8 +33,9 @@ public:
 	void AddPhoton (){fNumberOfOpticalPhotons+=1;}
 
 private:
-	G4double fEdep;
+	G4ThreeVector ParticleMomDir;
 
+	G4double fEdep;
 	G4double fCerenkovEdep;
 	G4double fComptEdep;
 	G4double fCoupledTEdep;

@@ -6,11 +6,11 @@ MyDetectorConstruction::MyDetectorConstruction()
 
 	if (SiPMpos == "base"){
 		SiPMsize = G4ThreeVector(SiPMBase/2., SiPMBase/2., SiPMHeight/2.);
-		SiPMplacement = G4ThreeVector(0., 0., -5.5*mm);
+		SiPMplacement = G4ThreeVector(0., 0., -(PScintHeight+SiPMHeight)/2.);
 	}
 	else{
 		SiPMsize = G4ThreeVector(SiPMHeight/2., SiPMBase/2., SiPMBase/2.);
-		SiPMplacement = G4ThreeVector(25.5*mm, 0., 0.);
+		SiPMplacement = G4ThreeVector((PScintXBase+SiPMHeight)/2., 0., 0.);
 	}
 }
 
@@ -111,7 +111,7 @@ void MyDetectorConstruction::BuildPlasticScint()
 {
 	//-------------Volumes-------------//
 	//scintillator
-	solidPScint = new G4Box("solidPScint", PScintBase/2., PScintBase/2., PScintHeight/2.);
+	solidPScint = new G4Box("solidPScint", PScintXBase/2., PScintYBase/2., PScintHeight/2.);
 	logicPScint = new G4LogicalVolume(solidPScint, PScintMat, "logicPScint");
 	physPScint = new G4PVPlacement(0, G4ThreeVector(0., 0., 0.),
 		logicPScint, "physPScint", logicWorld, false, 0, true);
