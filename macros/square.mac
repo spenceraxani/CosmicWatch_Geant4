@@ -1,0 +1,15 @@
+/run/numberOfThreads 4
+/run/initialize
+
+#general particle source (square)
+/gps/particle gamma
+/gps/direction 0 0 -1
+/gps/pos/type Plane
+/gps/pos/shape Rectangle
+/gps/pos/halfx 24 mm
+/gps/pos/halfy 24 mm
+/gps/pos/centre 0 0 5 cm
+/gps/ene/type Mono
+/gps/ene/mono 5 keV
+
+/run/beamOn 1000

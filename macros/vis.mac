@@ -2,7 +2,8 @@
 /run/initialize
 
 #using openGL to visualize
-/vis/open OGL
+#/vis/open OGLIX
+/vis/open OGL 1000x1000-480+5
 /vis/viewer/set/upVector 0 0 1
 /vis/viewer/set/viewpointVector 1 0.4 0.3
 /vis/drawVolume
@@ -28,7 +29,7 @@
 #/gps/pos/inner_radius 9 cm
 #/gps/ang/type cos
 #/gps/ene/type Mono
-#/gps/ene/mono 5 keV
+#/gps/ene/mono 5 keV    
 
 #general particle source (cos2_law)
 /gps/particle gamma
@@ -44,17 +45,6 @@
 #/gps/ang/maxtheta 90 deg
 /gps/ene/type Mono
 /gps/ene/mono 5 keV
-
-#general particle source (square)
-#/gps/particle gamma
-#/gps/direction 0 0 -1
-#/gps/pos/type Plane
-#/gps/pos/shape Rectangle
-#/gps/pos/halfx 24 mm
-#/gps/pos/halfy 24 mm
-#/gps/pos/centre 0 0 5 cm
-#/gps/ene/type Mono
-#/gps/ene/mono 5 keV
 
 #define scoring mesh
 #/score/create/boxMesh SiPM

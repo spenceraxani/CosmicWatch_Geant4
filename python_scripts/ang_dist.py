@@ -2,7 +2,7 @@ import matplotlib as mpl
 
 fsize = 18
 mpl.rcParams['legend.fontsize'] = 14
-mpl.rcParams["figure.figsize"] = (6,5)
+mpl.rcParams["figure.figsize"] = (8,5)
 mpl.rcParams['axes.labelsize'] = fsize
 mpl.rcParams['xtick.labelsize'] = fsize
 mpl.rcParams['ytick.labelsize'] = fsize
@@ -26,7 +26,8 @@ columns = int(input("enter number of columns: "))
 from merge_threads import merge
 
 #merge data in imput files
-f_templates = ["../data/run0-ang_dis_nt_Event_t0.csv"]
+#f_templates = ["../data/run0-ang_dis_nt_Event_t0.csv"]
+f_templates = ["../data/test_nt_Event_t0.csv"]
 
 #means_dic = {"5x5x1": 0, "10x5x2": 0}
 #color_dic = {"5x5x1": color_tab[0], "10x5x2": color_tab[1]}
@@ -55,7 +56,7 @@ ax1.grid(which="both")
 ax1.set_xticks(major_ticks)
 ax1.set_xticks(minor_ticks, minor=True)
 ax1.tick_params(axis='x', which='minor', grid_alpha=0.3)
-ax1.set_title("Energy deposition")
+ax1.set_title("Energy deposition, cylinder")
 ax1.set_xlabel(r"zenith angle $\theta$ [$^\circ$]")
 ax1.set_ylabel("Average energy deposit per event [keV]")
 
@@ -64,7 +65,7 @@ ax2.set_xticks(major_ticks)
 ax2.set_xticks(minor_ticks, minor=True)
 ax2.tick_params(axis='x', which='minor', grid_alpha=0.3)
 ax2.legend()
-ax2.set_title("Photon count")
+ax2.set_title("Photon count, cylinder")
 ax2.set_xlabel(r"zenith angle $\theta$ [$^\circ$]")
 ax2.set_ylabel("Average photon counts per event")
 
@@ -169,7 +170,7 @@ for f_template in f_templates:
     ax2.plot(t_bins+t_bin_size/2, photons, label="Photon count")
     ax2.plot(t_bins+t_bin_size/2, photons2, label=r"Photon count$\cdot\cos^2$")
 
-ax1.legend()
+ax1.legend(loc="upper left")
 
 save_file = re.sub("_t.*?\.", ".", f_templates[0])
 save_file = re.sub("/data/", "/figures/", save_file)
@@ -179,7 +180,7 @@ save_file = re.sub(".csv", "_energy_spectra.pdf", save_file)
 print("saving to:", save_file)
 fig1.savefig(save_file, bbox_inches="tight")
 
-ax2.legend()
+ax2.legend(loc="upper left")
 
 save_file = re.sub("_energy_spectra.pdf", "_photon_count.pdf", save_file)
 #save_file = re.sub("\.pdf", "_photon_count-SiPM-placement.pdf", save_file)

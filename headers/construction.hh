@@ -2,6 +2,7 @@
 #define CONSTRUCTION_HH
 
 #include "G4Box.hh"
+#include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
@@ -43,11 +44,11 @@ private:
 
 	//simulation world
 	G4double hWorld = 20.*cm;
-
+	
 	//Plastic scintillator
-	G4double PScintXBase = 50.*mm; //100 or 50
-	G4double PScintYBase = 50.*mm; //50 or 50
-	G4double PScintHeight = 10.*mm; //20 or 10
+	G4double PScintXLen = 50.*mm; //100 or 50
+	G4double PScintYLen = 50.*mm; //50 or 50
+	G4double PScintZLen = 10.*mm; //20 or 10
 
 	//SiPM
 	G4String SiPMpos = "base"; //"base" or "side"
@@ -56,7 +57,8 @@ private:
 	G4double SiPMBase = 3.*mm;
 	G4double SiPMHeight = 1.*mm;
 
-	G4Box *solidWorld, *solidPScint, *solidSiPM;
+	G4Tubs *solidPScint;
+	G4Box *solidWorld, *solidSiPM;
 	G4LogicalVolume *logicWorld, *logicPScint, *logicSiPM;
 	G4VPhysicalVolume *physWorld, *physPScint, *physSiPM;
 
