@@ -26,8 +26,8 @@ columns = int(input("enter number of columns: "))
 from merge_threads import merge
 
 #merge data in imput files
-#f_templates = ["../data/run0-ang_dis_nt_Event_t0.csv"]
-f_templates = ["../data/test_nt_Event_t0.csv"]
+f_templates = ["../data/run0-ang_dis_nt_Event_t0.csv"]
+#f_templates = ["../data/test_nt_Event_t0.csv"]
 
 #means_dic = {"5x5x1": 0, "10x5x2": 0}
 #color_dic = {"5x5x1": color_tab[0], "10x5x2": color_tab[1]}
@@ -56,7 +56,8 @@ ax1.grid(which="both")
 ax1.set_xticks(major_ticks)
 ax1.set_xticks(minor_ticks, minor=True)
 ax1.tick_params(axis='x', which='minor', grid_alpha=0.3)
-ax1.set_title("Energy deposition, cylinder")
+ax1.set_title("Energy deposition, square")
+#ax1.set_title("Energy deposition, cylinder")
 ax1.set_xlabel(r"zenith angle $\theta$ [$^\circ$]")
 ax1.set_ylabel("Average energy deposit per event [keV]")
 
@@ -65,7 +66,8 @@ ax2.set_xticks(major_ticks)
 ax2.set_xticks(minor_ticks, minor=True)
 ax2.tick_params(axis='x', which='minor', grid_alpha=0.3)
 ax2.legend()
-ax2.set_title("Photon count, cylinder")
+ax2.set_title("Photon count, square")
+#ax2.set_title("Photon count, cylinder")
 ax2.set_xlabel(r"zenith angle $\theta$ [$^\circ$]")
 ax2.set_ylabel("Average photon counts per event")
 
@@ -172,6 +174,7 @@ for f_template in f_templates:
 
 ax1.legend(loc="upper left")
 
+#substitute sny thing bwtween "_t" and "." with "." (eg. erase "Event0")
 save_file = re.sub("_t.*?\.", ".", f_templates[0])
 save_file = re.sub("/data/", "/figures/", save_file)
 #save_file = re.sub("-ang_dis_", "_", save_file)
