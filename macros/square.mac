@@ -6,10 +6,12 @@
 /gps/direction 0 0 -1
 /gps/pos/type Plane
 /gps/pos/shape Rectangle
-/gps/pos/halfx 24 mm
-/gps/pos/halfy 24 mm
-/gps/pos/centre 0 0 5 cm
+#(ScintXLen-1.mm)/2
+/gps/pos/halfx 1.5 mm
+#(ScintYLen-1.mm)/2
+/gps/pos/halfy 9.5 mm
+/gps/pos/centre 0 0 2 cm
 /gps/ene/type Mono
-/gps/ene/mono 5 keV
+/gps/ene/mono 662 keV
 
-/run/beamOn 1000
+/run/beamOn 10000

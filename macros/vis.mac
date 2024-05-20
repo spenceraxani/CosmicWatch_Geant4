@@ -12,8 +12,9 @@
 /vis/viewer/set/autoRefresh true
 /vis/viewer/set/background white
 /vis/scene/add/trajectories smooth
-/vis/scene/add/scale 5 cm y 0 0 0 manual 5 0 0 cm
-/vis/scene/add/axes -10 -10 -10 20 cm
+/vis/set/textSize 50
+/vis/scene/add/scale 22 mm y 0 0 0 manual -2 0 3 mm
+/vis/scene/add/axes -5 -5 -5 10 cm
 /vis/scene/add/eventID
 #show general particle source
 /vis/scene/add/gps
@@ -25,26 +26,39 @@
 #/gps/pos/type Surface
 #/gps/pos/shape Sphere
 #/gps/pos/centre 0 0 0 cm
-#/gps/pos/radius 9 cm
-#/gps/pos/inner_radius 9 cm
+#/gps/pos/radius 4 cm
+#/gps/pos/inner_radius 4 cm
 #/gps/ang/type cos
 #/gps/ene/type Mono
 #/gps/ene/mono 5 keV    
 
 #general particle source (cos2_law)
+#/gps/particle gamma
+#/gps/pos/type Surface
+#/gps/pos/shape Sphere
+#/gps/pos/centre 0 0 0 cm
+#/gps/pos/radius 4 cm
+#/gps/ang/type focused
+##/gps/hist/type theta
+##/gps/hist/point 0. 0.
+##/gps/hist/point 1.5 1.
+##/gps/hist/point 3.14 0.1
+##/gps/ang/maxtheta 90 deg
+#/gps/ene/type Mono
+#/gps/ene/mono 5 keV
+
+#general particle source (square)
 /gps/particle gamma
-/gps/pos/type Surface
-/gps/pos/shape Sphere
-/gps/pos/centre 0 0 0 cm
-/gps/pos/radius 9 cm
-/gps/ang/type focused
-#/gps/hist/type theta
-#/gps/hist/point 0. 0.
-#/gps/hist/point 1.5 1.
-#/gps/hist/point 3.14 0.1
-#/gps/ang/maxtheta 90 deg
+/gps/direction 0 0 -1
+/gps/pos/type Plane
+/gps/pos/shape Rectangle
+#(ScintXLen-1.mm)/2
+/gps/pos/halfx 1.5 mm
+#(ScintYLen-1.mm)/2
+/gps/pos/halfy 9.5 mm
+/gps/pos/centre 0 0 2 cm
 /gps/ene/type Mono
-/gps/ene/mono 5 keV
+/gps/ene/mono 662 keV
 
 #define scoring mesh
 #/score/create/boxMesh SiPM

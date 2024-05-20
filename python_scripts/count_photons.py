@@ -27,10 +27,15 @@ from merge_threads import merge
 
 #merge data in imput files
 #f_templates = ["../data/run0-side_nt_Event_t0.csv", "../data/run0-base_nt_Event_t0.csv"]
-f_templates = ["../data/run0_5x5x1-nt_Event_t0.csv", "../data/run0_10x5x2-nt_Event_t0.csv"]
+#f_templates = ["../data/run0_5x5x1-nt_Event_t0.csv", "../data/run0_10x5x2-nt_Event_t0.csv"]
+f_templates = ["../data/LYSO_run0_4x4x22-base_nt_Event_t0.csv", "../data/LYSO_run0_3x3x20-base_nt_Event_t0.csv", "../data/LYSO_run0_10x10x20-base_nt_Event_t0.csv"]
 
-means_dic = {"5x5x1": 0, "10x5x2": 0}
-color_dic = {"5x5x1": color_tab[0], "10x5x2": color_tab[1]}
+#material = "Plastic_Scint"
+#means_dic = {"5x5x1": 0, "10x5x2": 0}
+#color_dic = {"5x5x1": color_tab[0], "10x5x2": color_tab[1]}
+material = "LYSO"
+means_dic = {"4x4x22": 0, "3x3x20": 0, "10x10x20": 0}
+color_dic = {"4x4x22": color_tab[0], "3x3x20": color_tab[1], "10x10x20": color_tab[2]}
 
 def mean(bins, freq):
     dx = bins[1]-bins[0]
@@ -63,12 +68,15 @@ ax2.set_ylabel("Counts")
 for f_template in f_templates:
     
     dimensions = None
-    if "5x5x1" in f_template:
-        dimensions = "5x5x1"
-    elif "10x5x2" in f_template:
-        dimensions = "10x5x2"
+    if "4x4x22" in f_template:
+        dimensions = "4x4x22"
+    elif "3x3x20" in f_template:
+        dimensions = "3x3x20"
+    elif "10x10x20" in f_template:
+        dimensions = "10x10x20"
 
     data_frames = merge(runs, threads, columns, f_template)
+    print(data_frames[0])
 
     Events = len(data_frames[0].index)
 
@@ -112,8 +120,11 @@ for f_template in f_templates:
 
     #------------------counting photons------------------#
     photons = data_frames[0]['NOfOptPhotons']
+    print(photons)
     greatest = max(photons)
+    print(greatest)
     least = min(photons)
+    print(least)
 
     bin_size = (greatest-least)/500
     bin_size = 1
@@ -124,23 +135,26 @@ for f_template in f_templates:
     means_dic[dimensions] = mean(bins, counts)
 
     label = dimensions+"-mean = "+str(means_dic[dimensions])
-    ax2.axvline(means_dic[dimensions], label="mean at "+dimensions, color=color_dic[dimensions], ls=':')
+    #ax2.axvline(means_dic[dimensions], label="mean at "+dimensions+" mm", color=color_dic[dimensions], ls=':')
     ax2.step(bins[:-1], counts, where="mid", label=dimensions, color=color_dic[dimensions])
 
+ax1.axvline(x=477.65)
 ax1.legend()
 
 preface = "_crystal-size_"
 
-save_file = re.sub("_t.*?\.", ".", f_templates[0])
+#save_file = re.sub("_t.*?\.", ".", f_templates[0])
+save_file = re.sub("_nt_.*?\.", ".", f_templates[0])
 save_file = re.sub("/data/", "/figures/", save_file)
 #save_file = re.sub("-side_|-base_", "_", save_file)
-save_file = re.sub("_5x5x1-|_10x5x2-", "_", save_file)
+save_file = re.sub("_4x4x22-|_3x3x20-|_10x10x20-", "_", save_file)
 save_file = re.sub(".csv", preface+"energy_spectra.pdf", save_file)
 
 print("saving to:", save_file)
 fig1.savefig(save_file, bbox_inches="tight")
 
 ax2.legend()
+ax2.set_yscale(value="log")
 
 save_file = re.sub(preface+"energy_spectra.pdf", preface+"photon_count.pdf", save_file)
 #save_file = re.sub("\.pdf", "_photon_count-SiPM-placement.pdf", save_file)

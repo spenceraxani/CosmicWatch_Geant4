@@ -53,7 +53,7 @@ void MySteppingAction::UserSteppingAction(const G4Step* step)
 
 	//Compare current and scoring volume
 	//if(currentVolume == fScoringVolume){
-	if(CurrentVolName == "logicPScint"){
+	if(CurrentVolName == "logicScint"){
 
 		//Check if there is energy deposition
 		G4double edep = step->GetTotalEnergyDeposit();

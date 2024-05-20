@@ -43,12 +43,17 @@ private:
 	std::vector<G4VisAttributes*> fVisAttributes;
 
 	//simulation world
-	G4double hWorld = 20.*cm;
+	G4double hWorld = 10.*cm;
 	
 	//Plastic scintillator
-	G4double PScintXLen = 50.*mm; //100 or 50
-	G4double PScintYLen = 50.*mm; //50 or 50
-	G4double PScintZLen = 10.*mm; //20 or 10
+	//G4double ScintXLen = 50.*mm; //100 or 50
+	//G4double ScintYLen = 50.*mm; //50 or 50
+	//G4double ScintZLen = 10.*mm; //20 or 10
+
+	//Plastic scintillator
+	G4double ScintXLen = 4.*mm; //4, 3 or 10
+	G4double ScintYLen = 22.*mm; //22, 20 or 20
+	G4double ScintZLen = 4.*mm; //4, 3 or 10
 
 	//SiPM
 	G4String SiPMpos = "base"; //"base" or "side"
@@ -57,16 +62,17 @@ private:
 	G4double SiPMBase = 3.*mm;
 	G4double SiPMHeight = 1.*mm;
 
-	G4Tubs *solidPScint;
+	//G4Tubs *solidScint;
+	G4Box *solidScint;
 	G4Box *solidWorld, *solidSiPM;
-	G4LogicalVolume *logicWorld, *logicPScint, *logicSiPM;
-	G4VPhysicalVolume *physWorld, *physPScint, *physSiPM;
+	G4LogicalVolume *logicWorld, *logicScint, *logicSiPM;
+	G4VPhysicalVolume *physWorld, *physScint, *physSiPM;
 
 	//reflective scintillator surface
-	G4OpticalSurface *mirrorCoatPScint, *mirrorCoatSiPM, *opBoundary;
+	G4OpticalSurface *mirrorCoatScint, *mirrorCoatSiPM, *opBoundary;
 
 	//Materials
-	G4Material *Air, *PScintMat;
+	G4Material *Air, *LYSO_prelude, *Scint;
 
 	//Scoring volume
 	G4LogicalVolume *fScoringVolume;
