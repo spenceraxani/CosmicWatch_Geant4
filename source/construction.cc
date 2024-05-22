@@ -46,7 +46,7 @@ void MyDetectorConstruction::DefineMaterials()
 	NaI->AddElement(I, 1);*/
 
 	//-------------LYSO-------------//
-	G4double LYSO_density = 7.4*g/cm3;
+	G4double LYSO_density = 7.1*g/cm3;
   	LYSO_prelude = new G4Material("LYSO_prelude", LYSO_density, 4);
   	LYSO_prelude->AddElement(nist->FindOrBuildElement("Lu"), 71*perCent);
   	LYSO_prelude->AddElement(nist->FindOrBuildElement("Si"), 7*perCent);
