@@ -7,7 +7,7 @@
 /gps/pos/type Plane
 /gps/pos/shape Rectangle
 #(ScintXLen-1.mm)/2
-/gps/pos/halfx 1.5 mm
+/gps/pos/halfx 1 mm
 #(ScintYLen-1.mm)/2
 /gps/pos/halfy 9.5 mm
 /gps/pos/centre 0 0 2 cm

@@ -45,17 +45,20 @@ void MyDetectorConstruction::DefineMaterials()
 	NaI->AddElement(Na, 1);
 	NaI->AddElement(I, 1);*/
 
-	//-------------LYSO-------------//
+	//-------------LYSO:Ce-------------//
 	G4double LYSO_density = 7.1*g/cm3;
-  	LYSO_prelude = new G4Material("LYSO_prelude", LYSO_density, 4);
-  	LYSO_prelude->AddElement(nist->FindOrBuildElement("Lu"), 71*perCent);
-  	LYSO_prelude->AddElement(nist->FindOrBuildElement("Si"), 7*perCent);
-  	LYSO_prelude->AddElement(nist->FindOrBuildElement("O"), 18*perCent);
-  	LYSO_prelude->AddElement(nist->FindOrBuildElement("Y"), 4*perCent);
+  	LYSO = new G4Material("LYSO", LYSO_density, 4);
+  	LYSO->AddElement(nist->FindOrBuildElement("Lu"), 71*perCent);
+  	LYSO->AddElement(nist->FindOrBuildElement("Si"), 7*perCent);
+  	LYSO->AddElement(nist->FindOrBuildElement("O"), 18*perCent);
+  	LYSO->AddElement(nist->FindOrBuildElement("Y"), 4*perCent);
 
+	//Cerium doping
+	//0.19
+	G4double Ce_doping_percent = 0.5*perCent;
   	Scint = new G4Material("Scint", LYSO_density, 2);
-  	Scint->AddMaterial(LYSO_prelude, 99.81*perCent);
-  	Scint->AddElement(nist->FindOrBuildElement("Ce"), 0.19*perCent);
+  	Scint->AddMaterial(LYSO, 100.00*perCent-Ce_doping_percent);
+  	Scint->AddElement(nist->FindOrBuildElement("Ce"), Ce_doping_percent);
 
 	//Properties
 	const G4int ene_Len = 20;

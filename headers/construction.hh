@@ -51,9 +51,9 @@ private:
 	//G4double ScintZLen = 10.*mm; //20 or 10
 
 	//Plastic scintillator
-	G4double ScintXLen = 4.*mm; //4, 3 or 10
-	G4double ScintYLen = 22.*mm; //22, 20 or 20
-	G4double ScintZLen = 4.*mm; //4, 3 or 10
+	G4double ScintXLen = 3.*mm; //4, 3 or 10
+	G4double ScintYLen = 20.*mm; //22, 20 or 20
+	G4double ScintZLen = 3.*mm; //4, 3 or 10
 
 	//SiPM
 	G4String SiPMpos = "base"; //"base" or "side"
@@ -72,7 +72,7 @@ private:
 	G4OpticalSurface *mirrorCoatScint, *mirrorCoatSiPM, *opBoundary;
 
 	//Materials
-	G4Material *Air, *LYSO_prelude, *Scint;
+	G4Material *Air, *LYSO, *Scint;
 
 	//Scoring volume
 	G4LogicalVolume *fScoringVolume;
