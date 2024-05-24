@@ -183,7 +183,7 @@ void MyDetectorConstruction::BuildPlasticScint()
 	//transparent surface (scintillator, SiPM)
 	G4LogicalBorderSurface* SiPMSurface = new G4LogicalBorderSurface("SiPMSurface", physScint, physSiPM, opBoundary);
 
-	auto visAttributes = new G4VisAttributes(G4Colour(0, 0, 255, 0.3));
+	auto visAttributes = new G4VisAttributes(G4Colour(0, 0, 255, 0.2));
 	visAttributes->SetVisibility(true);
 	visAttributes->SetForceSolid(true);
 	logicScint->SetVisAttributes(visAttributes);

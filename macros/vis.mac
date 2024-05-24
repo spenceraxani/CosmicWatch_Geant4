@@ -5,7 +5,7 @@
 #/vis/open OGLIX
 /vis/open OGL 1000x1000-480+5
 /vis/viewer/set/upVector 0 0 1
-/vis/viewer/set/viewpointVector 1 0.4 0.3
+/vis/viewer/set/viewpointVector 1 0 0
 /vis/drawVolume
 
 #showing the particles
@@ -13,7 +13,8 @@
 /vis/viewer/set/background white
 /vis/scene/add/trajectories smooth
 /vis/set/textSize 50
-/vis/scene/add/scale 22 mm y 0 0 0 manual -2 0 3 mm
+/vis/scene/add/scale 50 mm y 0 0 0 manual -25 0 5 mm
+#/vis/scene/add/scale 3 mm y 0 0 0 manual -1.5 0 -4.5 mm
 /vis/scene/add/axes -5 -5 -5 10 cm
 /vis/scene/add/eventID
 #show general particle source
@@ -53,10 +54,10 @@
 /gps/pos/type Plane
 /gps/pos/shape Rectangle
 #(ScintXLen-1.mm)/2
-/gps/pos/halfx 1 mm
+/gps/pos/halfx 24.5 mm
 #(ScintYLen-1.mm)/2
-/gps/pos/halfy 9.5 mm
-/gps/pos/centre 0 0 2 cm
+/gps/pos/halfy 24.5 mm
+/gps/pos/centre 0 0 3 cm
 /gps/ene/type Mono
 /gps/ene/mono 662 keV
 
