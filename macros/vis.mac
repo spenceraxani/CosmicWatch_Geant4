@@ -17,7 +17,7 @@
 #/vis/scene/add/scale 3 mm y 0 0 0 manual -1.5 0 -4.5 mm
 /vis/scene/add/eventID
 #show general particle source
-#/vis/scene/add/gps
+/vis/scene/add/gps
 #Acumulate all events on the screen
 /vis/scene/endOfEventAction accumulate
 
@@ -35,35 +35,29 @@
 #general particle source (cos2_law)
 #/vis/scene/add/axes -7.5 -7.5 -7.5 15 cm auto true
 #/vis/scene/add/scale 50 mm y 0 0 0 manual 0 0 5 mm
-#/gps/particle mu-
-#/gps/pos/type Surface
-#/gps/pos/shape Sphere
-#/gps/pos/centre 0 0 0 cm
-#/gps/pos/radius 5 cm
-#/gps/ang/type focused
-#/gps/hist/type theta
-##/gps/hist/point 0. 0.
-##/gps/hist/point 0.78 1.
-##/gps/hist/point 1. 0.
-#/gps/ene/type Mono
-#/gps/ene/mono 10 MeV
-
-#general particle source (square)
-#/vis/scene/add/axes -5 -5 -5 10 cm auto true
-/vis/scene/add/axes -7.5 -7.5 -7.5 15 cm auto true
-#/vis/scene/add/scale 50 mm y 0 0 0 manual -25 0 5 mm
-/vis/scene/add/scale 50 mm x 0 0 0 manual 0 50 -10 mm
-/vis/scene/add/scale 100 mm y 0 0 0 manual -25 0 10 mm
-/vis/scene/add/scale 20 mm z 0 0 0 manual -25 50 0 mm
 /gps/particle mu-
-/gps/direction 0 0 -1
-/gps/pos/type Plane
-/gps/pos/shape Rectangle
-/gps/pos/halfx 24.5 mm #(ScintXLen-1.mm)/2
-/gps/pos/halfy 24.5 mm #(ScintYLen-1.mm)/2
-/gps/pos/centre 0 0 5 cm
+/gps/pos/type Surface
+/gps/pos/shape Sphere
+/gps/pos/centre 0 0 0 cm
+/gps/pos/radius 5 cm
+/gps/ang/type focused
+/gps/hist/type theta
+#/gps/hist/point 0. 0.
+#/gps/hist/point 0.78 1.
+#/gps/hist/point 1. 0.
 /gps/ene/type Mono
 /gps/ene/mono 10 MeV
+
+#general particle source (square)
+#/gps/particle mu-
+#/gps/direction 0 0 -1
+#/gps/pos/type Plane
+#/gps/pos/shape Rectangle
+#/gps/pos/halfx 24.5 mm #(ScintXLen-1.mm)/2
+#/gps/pos/halfy 24.5 mm #(ScintYLen-1.mm)/2
+#/gps/pos/centre 0 0 2 cm
+#/gps/ene/type Mono
+#/gps/ene/mono 50 MeV
 
 #define scoring mesh
 #/score/create/boxMesh SiPM
