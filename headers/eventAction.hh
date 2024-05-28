@@ -31,6 +31,7 @@ public:
 	void AddOpAbsEdep (G4double edep){fOpAbsorptionEdep+=edep;}
 	void AddPhotEdep (G4double edep){fPhotEdep+=edep;}
 	void AddPhoton (){fNumberOfOpticalPhotons+=1;}
+	void AddScintPhoton (){fScintPhot+=1;}
 
 private:
 	G4ThreeVector ParticleMomDir;
@@ -46,6 +47,7 @@ private:
 	G4double fOpAbsorptionEdep;
 	G4double fPhotEdep;
 	G4int fNumberOfOpticalPhotons;
+	G4int fScintPhot;
 };
 
 #endif

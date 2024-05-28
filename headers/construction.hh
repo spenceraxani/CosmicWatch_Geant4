@@ -43,17 +43,18 @@ private:
 	std::vector<G4VisAttributes*> fVisAttributes;
 
 	//simulation world
-	G4double hWorld = 10.*cm;
+	G4double hWorld = 15.*cm; //for use with big PScint
+	//G4double hWorld = 10.*cm;
 	
-	//Plastic scintillator
+	//Cylindrical PScint
 	//G4double ScintXLen = 50.*mm; //100 or 50
-	//G4double ScintYLen = 50.*mm; //50 or 50
+	//G4double ScintYLen = 50.*mm; //100 or 50
 	//G4double ScintZLen = 10.*mm; //20 or 10
 
-	//Plastic scintillator
+	//scintillator
 	G4double ScintXLen = 50.*mm; //4, 3 or 10
-	G4double ScintYLen = 50.*mm; //22, 20 or 20
-	G4double ScintZLen = 10.*mm; //4, 3 or 10
+	G4double ScintYLen = 100.*mm; //22, 20 or 20
+	G4double ScintZLen = 20.*mm; //4, 3 or 10
 
 	//SiPM
 	G4String SiPMpos = "base"; //"base" or "side"

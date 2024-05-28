@@ -15,6 +15,7 @@ MyEventAction::MyEventAction(MyRunAction*)
 	fOpAbsorptionEdep = 0;
 	fPhotEdep = 0;
 	fNumberOfOpticalPhotons = 0;
+	fScintPhot = 0;
 }
 
 MyEventAction::~MyEventAction()
@@ -35,6 +36,7 @@ void MyEventAction::BeginOfEventAction(const G4Event*)
 	fOpAbsorptionEdep = 0;
 	fPhotEdep = 0;
 	fNumberOfOpticalPhotons = 0;
+	fScintPhot = 0;
 }
 
 void MyEventAction::EndOfEventAction(const G4Event* event)
@@ -65,6 +67,7 @@ void MyEventAction::EndOfEventAction(const G4Event* event)
 	man->FillNtupleDColumn(0, 12, fOpAbsorptionEdep/keV);
 	man->FillNtupleDColumn(0, 13, fPhotEdep/keV);
 	man->FillNtupleIColumn(0, 14, fNumberOfOpticalPhotons);
+	man->FillNtupleIColumn(0, 15, fScintPhot);
 	man->AddNtupleRow(0);
 
 	G4cout << "finished event " << eventID << G4endl;

@@ -1,0 +1,1 @@
+Folder destined to save testing data, make sure to change "data_folder" in runAction.cc to "../data/test/" before uploading to a repo, this will make sure you will not overwrite important data if you forget to change the filename or folder.

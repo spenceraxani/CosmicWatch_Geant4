@@ -2,16 +2,15 @@
 /run/initialize
 
 #general particle source (square)
-/gps/particle gamma
+#general particle source (square)
+/gps/particle mu-
 /gps/direction 0 0 -1
 /gps/pos/type Plane
 /gps/pos/shape Rectangle
-#(ScintXLen-1.mm)/2
-/gps/pos/halfx 1 mm
-#(ScintYLen-1.mm)/2
-/gps/pos/halfy 9.5 mm
+/gps/pos/halfx 24.5 mm #(ScintXLen-1.mm)/2
+/gps/pos/halfy 24.5 mm #(ScintYLen-1.mm)/2
 /gps/pos/centre 0 0 2 cm
 /gps/ene/type Mono
-/gps/ene/mono 662 keV
+/gps/ene/mono 50 MeV
 
-/run/beamOn 10000
+/run/beamOn 1000

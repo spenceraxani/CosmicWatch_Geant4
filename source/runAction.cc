@@ -11,7 +11,7 @@ MyRunAction::MyRunAction()
 	man->CreateNtupleDColumn("Px");
 	man->CreateNtupleDColumn("Py");
 	man->CreateNtupleDColumn("Pz");
-	man->CreateNtupleDColumn("Tot - OpAbs");
+	man->CreateNtupleDColumn("Tot-OpAbs");
 	man->CreateNtupleDColumn("Cerenkov");
 	man->CreateNtupleDColumn("compt");
 	man->CreateNtupleDColumn("CoupledTransportation");
@@ -22,6 +22,7 @@ MyRunAction::MyRunAction()
 	man->CreateNtupleDColumn("OpAbsorption");
 	man->CreateNtupleDColumn("phot");
 	man->CreateNtupleIColumn("NOfOptPhotons");
+	man->CreateNtupleIColumn("NOfScintPhotons");
 	man->FinishNtuple();
 
 	//man->CreateNtuple("NOfOptPhotons", "NOfOptPhotons");
@@ -42,15 +43,10 @@ void MyRunAction::BeginOfRunAction(const G4Run* run)
 
 	G4AnalysisManager* man = G4AnalysisManager::Instance();
 
-	//man->SetNtupleFileName(0, "../data/run"+strRunID.str()+".csv");
-	//man->SetNtupleFileName(1, "../data/run"+strRunID.str()+"_SiPMHits.csv");
-	//man->OpenFile("../data/run"+strRunID.str()+".csv");
-	//man->OpenFile("../data/run"+strRunID.str()+"_SiPMHits.csv");
-	//man->Reset();
-	//man->OpenFile("../data/run"+strRunID.str()+"-ang_dis.csv");
-	//man->OpenFile("../data/LYSO_0,5doping_run"+strRunID.str()+"_3x3x20-base.csv");
+	G4String data_folder = "../data/test/";
+	man->OpenFile(data_folder+"run"+strRunID.str()+".csv");
 	
-	man->OpenFile("../data/vis_data.csv");
+	//man->OpenFile("../data/test_data.csv");
 }
 
 void MyRunAction::EndOfRunAction(const G4Run*)

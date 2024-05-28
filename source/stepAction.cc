@@ -29,6 +29,9 @@ void MySteppingAction::UserSteppingAction(const G4Step* step)
 
 	//Particle Track
 	G4Track *track = step->GetTrack();
+	//Secondary particle tracks
+	//auto secTrack = step->GetSecondaryInCurrentStep();
+	//G4double secSize = (*secTrack).size();
 
 	//get primatry particle incident direction
 	if(track->GetCurrentStepNumber()==1 && track->GetTrackID()==1)
@@ -39,21 +42,47 @@ void MySteppingAction::UserSteppingAction(const G4Step* step)
 
 	//Particle name
 	const G4ParticleDefinition* particle = step->GetTrack()->GetDefinition();
-	//const G4String pName = particle->GetParticleName();
 
 	//count number of photons reaching SiPM
-	if(particle==G4OpticalPhoton::OpticalPhotonDefinition() && currentVolume==fScoringVolume){
-		//G4int id = track->GetTrackID();
-		//G4int idP = track->GetParentID();
-		track->SetTrackStatus(fStopAndKill);
+	if(particle==G4OpticalPhoton::OpticalPhotonDefinition()){
+		if(track->GetCurrentStepNumber()==1){
+			fEventAction->AddScintPhoton();	
+		}
+	
+		if(currentVolume==fScoringVolume){
+			//G4int id = track->GetTrackID();
+			//G4int idP = track->GetParentID();
+			track->SetTrackStatus(fStopAndKill);
 
-		//G4cout << "optical photon in SiPM\t" << id << "\t" << idP << G4endl;
-		fEventAction->AddPhoton();
+			//G4cout << "optical photon in SiPM\t" << id << "\t" << idP << G4endl;
+			fEventAction->AddPhoton();
+		}
 	}
 
 	//Compare current and scoring volume
 	//if(currentVolume == fScoringVolume){
 	if(CurrentVolName == "logicScint"){
+
+		//Check for electrons and their produced photons
+		/*const G4String pName = particle->GetParticleName();
+		if(pName == "e-"){
+			if(track->GetTrackStatus()==G4TrackStatus::fStopAndKill){
+				G4cout << "dead" << G4endl;
+				auto secTrack = step->GetSecondary();
+				G4double secSize = (*secTrack).size();
+
+				G4int numScint = 0;
+				for(int i=0; i<secSize; i++){
+					G4String secondaryName = (*secTrack)[i]->GetDefinition()->GetParticleName();
+					// Increment counter if secondary is an optical photon
+					if (secondaryName=="opticalphoton"){
+						numScint += 1;
+					}
+				}
+				fEventAction->AddScintPhoton(numScint);
+
+			}
+		}*/
 
 		//Check if there is energy deposition
 		G4double edep = step->GetTotalEnergyDeposit();

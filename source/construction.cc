@@ -31,12 +31,12 @@ void MyDetectorConstruction::DefineMaterials()
 	Air = nist->FindOrBuildMaterial("G4_AIR");
 
 	//Properties
-	//std::vector<G4double> rindexAir = {1.0, 1.0};//For use with PScint
-	std::vector<G4double> rindexAir  =  {1.00, 1.00, 1.00, 1.00,
+	std::vector<G4double> rindexAir = {1.0, 1.0};//For use with PScint
+	/*std::vector<G4double> rindexAir  =  {1.00, 1.00, 1.00, 1.00,
 										1.00, 1.00, 1.00, 1.00,
 										1.00, 1.00, 1.00, 1.00,
 										1.00, 1.00, 1.00, 1.00,
-										1.00, 1.00, 1.00, 1.00};//For use with LYSO
+										1.00, 1.00, 1.00, 1.00};//For use with LYSO*/
 
 	//-------------NaI-------------//
 	/*Na = nist->FindOrBuildElement("Na");
@@ -46,7 +46,7 @@ void MyDetectorConstruction::DefineMaterials()
 	NaI->AddElement(I, 1);*/
 
 	//-------------LYSO:Ce-------------//
-	G4double LYSO_density = 7.1*g/cm3;
+	/*G4double LYSO_density = 7.1*g/cm3;
   	LYSO = new G4Material("LYSO", LYSO_density, 4);
   	LYSO->AddElement(nist->FindOrBuildElement("Lu"), 71*perCent);
   	LYSO->AddElement(nist->FindOrBuildElement("Si"), 7*perCent);
@@ -87,22 +87,24 @@ void MyDetectorConstruction::DefineMaterials()
 											3.5*m, 3.5*m, 3.5*m, 3.5*m};
 
 	G4double decaytLYSO = 36.0*ns;
-	G4double LYieldLYSO = 33./keV;
+	G4double LYieldLYSO = 33./keV;*/
 
 	//-------------Plastic Scintillator-------------//
-	/*ScintMat = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
+	Scint = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
 
 	//Properties
+	const G4int ene_Len = 2;
 	//E=hc/lambda
 	//hc=1.23984197x10^-6 eVm
 	//"visible light" 200nm to 900nm
 	std::vector<G4double> ene = {1.23984197*eV/0.9, 1.23984197*eV/0.2};
-	std::vector<G4double> rindexPScint = {1.78, 1.78};
-	std::vector<G4double> absorLenPScint = {38.1*cm, 38.1*cm};
-	std::vector<G4double> absorLenPScint = {7.1314e-06*mm, 7.13875e-06*mm};
-	std::vector<G4double> specPSint = {1.0, 1.0};
-	G4double decaytPScint = 250*ns;
-	G4double LYieldPScint = 38./keV*/
+	std::vector<G4double> rindexPScint = {1.58, 1.58};
+	//std::vector<G4double> absorLenPScint = {38.1*cm, 38.1*cm};
+	//std::vector<G4double> absorLenPScint = {7.1314e-06*mm, 7.13875e-06*mm};
+	std::vector<G4double> absorLenPScint = {160.0*cm, 160.0*cm};
+	std::vector<G4double> specPScint = {1.0, 1.0};
+	G4double decaytPScint = 2.4*ns;
+	G4double LYieldPScint = 10./keV;
 
 	//-------------Set Material Properties-------------//
 
@@ -114,12 +116,12 @@ void MyDetectorConstruction::DefineMaterials()
 
 	//Scint
 	G4MaterialPropertiesTable *mptScint = new G4MaterialPropertiesTable();
-	mptScint->AddProperty("RINDEX", ene, rindexLYSO);
-	mptScint->AddProperty("ABSLENGTH", ene, absorLenLYSO, false, true);
-	mptScint->AddProperty("SCINTILLATIONCOMPONENT1", ene, specLYSO); //energy spectrum of the emitted photons
-	mptScint->AddConstProperty("SCINTILLATIONYIELD", LYieldLYSO); //# of photons per energy loss
-	mptScint->AddConstProperty("RESOLUTIONSCALE", 1.0); //photon distribution sigma
-	mptScint->AddConstProperty("SCINTILLATIONTIMECONSTANT1", decaytLYSO); //decay time inside the scintillator
+	mptScint->AddProperty("RINDEX", ene, rindexPScint);
+	mptScint->AddProperty("ABSLENGTH", ene, absorLenPScint, false, true);
+	mptScint->AddProperty("SCINTILLATIONCOMPONENT1", ene, specPScint); //energy spectrum of the emitted photons
+	mptScint->AddConstProperty("SCINTILLATIONYIELD", LYieldPScint); //# of photons per energy loss
+	mptScint->AddConstProperty("RESOLUTIONSCALE", 0.0); //photon distribution sigma
+	mptScint->AddConstProperty("SCINTILLATIONTIMECONSTANT1", decaytPScint); //decay time inside the scintillator
 	mptScint->AddConstProperty("SCINTILLATIONYIELD1", 1.);
 
 	Scint->SetMaterialPropertiesTable(mptScint);
