@@ -1,0 +1,25 @@
+{
+    "materials": [
+        "PScint"
+    ],
+    "size_dict": {
+        "PScint": [
+            "50x50x10",
+            "100x50x20"
+        ]
+    },
+    "color_dict": {
+        "50x50x10": "tab:blue",
+        "100x50x20": "tab:orange"
+    },
+    "line_style":{
+        "PScint": "-"
+    },
+    "alpha":{
+        "PScint": 1
+    },
+    "runs": 1,
+    "threads": 4,
+    "columns": 16,
+    "dtype": "scint_size"
+}

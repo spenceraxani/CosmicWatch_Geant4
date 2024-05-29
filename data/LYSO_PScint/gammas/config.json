@@ -1,0 +1,35 @@
+{
+    "materials": [
+        "LYSO",
+        "PScint"
+    ],
+    "size_dict": {
+        "LYSO": [
+            "20x3x3",
+            "22x4x4",
+            "20x10x10"
+        ],
+        "PScint": [
+            "20x3x3",
+            "22x4x4",
+            "20x10x10"
+        ]
+    },
+    "color_dict": {
+        "20x3x3": "tab:blue",
+        "22x4x4": "tab:orange",
+        "20x10x10": "tab:green"
+    },
+    "line_style":{
+        "LYSO": "-",
+        "PScint": ":"
+    },
+    "alpha":{
+        "LYSO": 0.6,
+        "PScint": 1
+    },
+    "runs": 1,
+    "threads": 4,
+    "columns": 16,
+    "dtype": "gammas"
+}
