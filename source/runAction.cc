@@ -43,8 +43,8 @@ void MyRunAction::BeginOfRunAction(const G4Run* run)
 
 	G4AnalysisManager* man = G4AnalysisManager::Instance();
 
-	G4String data_folder = "../data/PScint/muons_photCount/10x5x2/";
-	man->OpenFile(data_folder+"run"+strRunID.str()+".csv");
+	G4String data_folder = "../data/test/";
+	man->OpenFile(data_folder+"PScint_50x50x10scint_size_run"+strRunID.str()+".csv");
 	
 	//man->OpenFile("../data/test_data.csv");
 }

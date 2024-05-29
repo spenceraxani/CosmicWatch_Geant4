@@ -53,8 +53,8 @@ private:
 
 	//scintillator
 	G4double ScintXLen = 50.*mm; //4, 3 or 10
-	G4double ScintYLen = 100.*mm; //22, 20 or 20
-	G4double ScintZLen = 20.*mm; //4, 3 or 10
+	G4double ScintYLen = 50.*mm; //22, 20 or 20
+	G4double ScintZLen = 10.*mm; //4, 3 or 10
 
 	//SiPM
 	G4String SiPMpos = "base"; //"base" or "side"

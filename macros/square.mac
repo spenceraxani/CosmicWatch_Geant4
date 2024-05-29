@@ -7,9 +7,9 @@
 /gps/pos/type Plane
 /gps/pos/shape Rectangle
 /gps/pos/halfx 24.5 mm #(ScintXLen-1.mm)/2
-/gps/pos/halfy 49.5 mm #(ScintYLen-1.mm)/2
+/gps/pos/halfy 24.5 mm #(ScintYLen-1.mm)/2
 /gps/pos/centre 0 0 2 cm
 /gps/ene/type Mono
 /gps/ene/mono 50 MeV
 
-/run/beamOn 1000
+/run/beamOn 10000
