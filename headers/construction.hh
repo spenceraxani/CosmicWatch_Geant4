@@ -63,8 +63,8 @@ private:
 	G4double SiPMBase = 3.*mm;
 	G4double SiPMHeight = 1.*mm;
 
-	//G4Tubs *solidScint;
-	G4Box *solidScint;
+	G4Tubs *solidScint;
+	//G4Box *solidScint;
 	G4Box *solidWorld, *solidSiPM;
 	G4LogicalVolume *logicWorld, *logicScint, *logicSiPM;
 	G4VPhysicalVolume *physWorld, *physScint, *physSiPM;

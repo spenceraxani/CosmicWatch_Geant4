@@ -38,7 +38,7 @@ def mean(bins, freq):
 def err(row):
     return np.abs(row.Tot-row.Sum)/row.Tot
 
-data_folder = "PScint/scint_size/"
+data_folder = "PScint/scint_size_10kEvents/"
 
 with open("../data/"+data_folder+"config.json", "r") as infile:
     config = json.load(infile)
@@ -55,6 +55,7 @@ num_plots = 2
 fig1, ax1 = plt.subplots(nrows=num_plots, ncols=1, figsize=(10, 10))
 plt.tight_layout(h_pad=3.0)
 ax2 = ax1[1].twinx()
+ax2.sharey(ax1[1])
 #fig1, ax1 = plt.subplots(nrows=len(config["size_dict"]["PScint"]), ncols=1, sharex='col', figsize=(10, 12), squeeze=True)
 #fig2, ax2 = plt.subplots(nrows=len(config["size_dict"]["PScint"]), ncols=1, sharex='col', figsize=(10, 12), squeeze=True)
 #fig3, ax3 = plt.subplots(nrows=len(config["size_dict"]["PScint"]), ncols=1, sharex='col', figsize=(10, 12), squeeze=True)
@@ -166,7 +167,7 @@ for material in materials:
                 ax1[s].set_xticks(minor_x, minor=True)
 
                 ax1[s].set_title(label="Energy deposition")
-                ax1[s].set_xlabel("Energy/event [keV]")
+                ax1[s].set_xlabel("Energy deposition/event [keV]")
                 ax1[s].step(bins[:-1]+bin_size/2, counts, where="mid", label=size+r" mm$^3$", color=config["color_dict"][size], ls=config["line_style"][material], alpha=config["alpha"][material], lw=2)
 
                 ax1[s].legend(loc="upper right")
@@ -195,7 +196,7 @@ for material in materials:
                 #ax1[s].set_title("SiPM photon count")
                 #ax1[s].set_xlabel("No of photons/event")
                 ax2.step(bins[:-1]+bin_size/2, counts, where="mid", label=size+r" mm$^3$", color=config["color_dict"][size], ls="--", alpha=config["alpha"][material], lw=2)
-                ax2.set_ylim(top=70)
+                #ax2.set_ylim(top=70)
             #ax2[s].step(bins[:-1]+bin_size/2, counts, where="mid", label=material, color=config["color_dict"][size], ls=config["line_style"][material], alpha=config["alpha"][material], lw=3)
 
             #------------------counting Scint photons------------------#
@@ -223,7 +224,7 @@ for material in materials:
                 ax1[s].set_title("Photon detection and production")
                 ax1[s].set_xlabel("No of photons/event")
                 ax1[s].step(bins[:-1]+bin_size/2, counts, where="mid", label=size+r" mm$^3$", color=config["color_dict"][size], ls="-", alpha=config["alpha"][material], lw=2)
-                ax1[s].set_ylim(top=70)
+                #ax1[s].set_ylim(top=70)
 
                 ax1[s].set_xscale(value="log")
                 ax1[s].legend(loc="upper right", title="Photons produced")
@@ -269,7 +270,7 @@ for material in materials:
 
             #ax3[s].legend(loc="upper right", title=size+r" mm$^3$")
 
-    ax2.legend(loc="upper left", title="SiPM counts")
+    ax2.legend(loc="upper center", title="photons reaching the SiPM")
 
 #ax1[1].text(s=r"$E_C$", x=Compt_edge+10, y=max_En)
 
@@ -280,6 +281,7 @@ save_file = re.sub("/data/", "/figures/", save_file)
 #save_file = re.sub(".csv", "energy_spectra.pdf", save_file)
 save_file = re.sub(".csv", "PScint.pdf", save_file)
 
+save_file = "../figures/"+data_folder+materials[0]+"_"+config["dtype"]+".pdf"
 print("saving to:", save_file)
 fig1.savefig(save_file, bbox_inches="tight")
 
