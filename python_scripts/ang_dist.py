@@ -26,7 +26,7 @@ columns = int(input("enter number of columns: "))
 from merge_threads import merge
 
 #merge data in imput files
-f_templates = ["../data/run0-ang_dis_nt_Event_t0.csv"]
+f_templates = ["../data/PScint/ang_dist/square/PScint_ang_dist_run0_nt_Event_t0.csv"]
 #f_templates = ["../data/test_nt_Event_t0.csv"]
 
 #means_dic = {"5x5x1": 0, "10x5x2": 0}
@@ -48,6 +48,7 @@ def mean(bins, freq):
 
 fig1, ax1 = plt.subplots()
 fig2, ax2 = plt.subplots()
+fig3, ax3 = plt.subplots()
 
 major_ticks = np.arange(0, 181, 30)
 minor_ticks = np.arange(0, 181, 10)
@@ -66,10 +67,10 @@ ax2.set_xticks(major_ticks)
 ax2.set_xticks(minor_ticks, minor=True)
 ax2.tick_params(axis='x', which='minor', grid_alpha=0.3)
 ax2.legend()
-ax2.set_title("Photon count, square")
+ax2.set_title("Photon detection and production, square")
 #ax2.set_title("Photon count, cylinder")
 ax2.set_xlabel(r"zenith angle $\theta$ [$^\circ$]")
-ax2.set_ylabel("Average photon counts per event")
+ax2.set_ylabel("photon counts/event")
 
 for f_template in f_templates:
     
@@ -92,7 +93,7 @@ for f_template in f_templates:
     def err(row):
         return np.abs(row.Tot-row.Sum)/row.Tot
 
-    diff_list  = [(t-s)/t if t>0 else 0 for t, s in zip(data_frames[0]["Tot"], data_frames[0]["Sum"])]
+    diff_list  = [(t-s)/t if t>0 else 0 for t, s in zip(data_frames[0]["Tot-OpAbs"], data_frames[0]["Sum"])]
 
     data_frames[0]["Diff"] = diff_list
     #data_frames[0]["Diff"] = data_frames[0].apply(err, axis=1) 
@@ -105,13 +106,13 @@ for f_template in f_templates:
     for e in range(Events):
         if np.abs(data_frames[0]["Diff"][e]) >= threshold:
             counter += 1
-            print(e, data_frame1[0]["Tot"][e], data_frames[0]["Sum"][e], data_frames[0]["Diff"][e])
+            print(e, data_frames[0]["Tot-OpAbs"][e], data_frames[0]["Sum"][e], data_frames[0]["Diff"][e])
 
     print(counter, "events have an error greater than", threshold)
 
-    weird_events = data_frames[0].index[data_frames[0]['Tot'] >= 662].tolist()
+    weird_events = data_frames[0].index[data_frames[0]['Tot-OpAbs'] >= 662].tolist()
 
-    tot_energy = [t for t in data_frames[0]['Tot'] if t>0]
+    tot_energy = [t for t in data_frames[0]['Tot-OpAbs'] if t>0]
 
     greatest = max(tot_energy)
     least = min(tot_energy)
@@ -124,10 +125,11 @@ for f_template in f_templates:
     #ax1.step(bins[:-1], counts, where="mid", label=dimensions)
 
     #------------------counting photons------------------#
-    t_bin_size = 2
+    t_bin_size = 1
     t_bins = np.arange(0, 180, t_bin_size)
     
     photons = [[] for _ in range(len(t_bins))]
+    ScintPhotons = [[] for _ in range(len(t_bins))]
     energies = [[] for _ in range(len(t_bins))]
     print(photons)
     print(len(t_bins))
@@ -138,15 +140,21 @@ for f_template in f_templates:
 
         photons[t] = data_frames[0].loc[t_events, 'NOfOptPhotons'].tolist()
         if len(photons[t]) > 0:
-            photons[t] = sum(photons[t])/len(photons[t])
+            photons[t] = sum(photons[t])/len(photons[t]) #average number of photons per event
         else:
             photons[t] = 0
 
-        energies[t] = data_frames[0].loc[t_events, 'Tot'].tolist()
+        energies[t] = data_frames[0].loc[t_events, 'Tot-OpAbs'].tolist()
         if len(energies[t]) > 0:
-            energies[t] = sum(energies[t])/len(energies[t])
+            energies[t] = sum(energies[t])/len(energies[t]) #average edep per event
         else:
             energies[t] = 0
+
+        ScintPhotons[t] = data_frames[0].loc[t_events, 'NOfScintPhotons'].tolist()
+        if len(ScintPhotons[t]) > 0:
+            ScintPhotons[t] = sum(ScintPhotons[t])/len(ScintPhotons[t]) #average number of photons per event
+        else:
+            ScintPhotons[t] = 0
 
     #photons = data_frames[0]['NOfOptPhotons']
     #greatest = max(photons)
@@ -165,12 +173,15 @@ for f_template in f_templates:
 
     photons2 = [p*(np.cos(np.radians(t_p))**2) for p, t_p in zip(photons, t_bins+t_bin_size/2)]
     energies2 = [e*(np.cos(np.radians(t_p))**2) for e, t_p in zip(energies, t_bins+t_bin_size/2)]
+    ScintPhotons2 = [p*(np.cos(np.radians(t_p))**2) for p, t_p in zip(ScintPhotons, t_bins+t_bin_size/2)]
 
     ax1.plot(t_bins+t_bin_size/2, energies, label="energy deposit")
     ax1.plot(t_bins+t_bin_size/2, energies2, label=r"energy deposit$\cdot\cos^2$")
 
-    ax2.plot(t_bins+t_bin_size/2, photons, label="Photon count")
-    ax2.plot(t_bins+t_bin_size/2, photons2, label=r"Photon count$\cdot\cos^2$")
+    ax2.plot(t_bins+t_bin_size/2, ScintPhotons, label="Produced photons", color="tab:blue")
+    ax2.plot(t_bins+t_bin_size/2, ScintPhotons2, label=r"Produced photons$\cdot\cos^2$", color="tab:orange")
+    ax2.plot(t_bins+t_bin_size/2, photons, label="SiPM counts", ls="--", color="tab:blue")
+    ax2.plot(t_bins+t_bin_size/2, photons2, label=r"SiPM counts$\cdot\cos^2$", ls="--", color="tab:orange")
 
 ax1.legend(loc="upper left")
 
@@ -184,6 +195,7 @@ print("saving to:", save_file)
 fig1.savefig(save_file, bbox_inches="tight")
 
 ax2.legend(loc="upper left")
+#ax2.set_yscale(value="log")
 
 save_file = re.sub("_energy_spectra.pdf", "_photon_count.pdf", save_file)
 #save_file = re.sub("\.pdf", "_photon_count-SiPM-placement.pdf", save_file)

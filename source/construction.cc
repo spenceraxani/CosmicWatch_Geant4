@@ -166,8 +166,8 @@ void MyDetectorConstruction::BuildPlasticScint()
 {
 	//-------------Volumes-------------//
 	//scintillator
-	solidScint = new G4Tubs("solidScint", 0.*cm, ScintXLen/2., ScintZLen/2., 0.*deg, 360.*deg);
-	//solidScint = new G4Box("solidScint", ScintXLen/2., ScintYLen/2., ScintZLen/2.);
+	//solidScint = new G4Tubs("solidScint", 0.*cm, ScintXLen/2., ScintZLen/2., 0.*deg, 360.*deg);
+	solidScint = new G4Box("solidScint", ScintXLen/2., ScintYLen/2., ScintZLen/2.);
 	logicScint = new G4LogicalVolume(solidScint, Scint, "logicScint");
 	physScint = new G4PVPlacement(0, G4ThreeVector(0., 0., 0.),
 		logicScint, "physScint", logicWorld, false, 0, true);

@@ -9,9 +9,6 @@
 /gps/pos/radius 5 cm
 /gps/ang/type focused
 /gps/hist/type theta
-#/gps/hist/point 0. 0.
-#/gps/hist/point 0.78 1.
-#/gps/hist/point 1. 0.
 /gps/ene/type Mono
 /gps/ene/mono 50 MeV
 

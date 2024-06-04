@@ -1,0 +1,28 @@
+{
+    "materials": [
+        "PScint"
+    ],
+    "size_dict": {
+        "PScint": [
+            "50x50x10"
+        ]
+    },
+    "config_dict": [
+        "base",
+        "side"
+    ],
+    "color_dict": {
+        "base": "tab:blue",
+        "side": "tab:orange"
+    },
+    "line_style":{
+        "PScint": "-"
+    },
+    "alpha":{
+        "PScint": 1
+    },
+    "runs": 1,
+    "threads": 4,
+    "columns": 16,
+    "dtype": "SiPM_placement"
+}
