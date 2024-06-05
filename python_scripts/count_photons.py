@@ -2,6 +2,7 @@ import matplotlib as mpl
 
 fsize = 12
 mpl.rcParams['legend.fontsize'] = fsize-2
+mpl.rcParams['axes.titlesize'] = fsize+2
 mpl.rcParams["figure.figsize"] = (10,4)
 mpl.rcParams['axes.labelsize'] = fsize
 mpl.rcParams['xtick.labelsize'] = fsize
@@ -38,7 +39,7 @@ def mean(bins, freq):
 def err(row):
     return np.abs(row.Tot-row.Sum)/row.Tot
 
-data_folder = "PScint/SiPM_placement/"
+data_folder = "PScint/scint_size_10kEvents/"
 
 with open("../data/"+data_folder+"config.json", "r") as infile:
     config = json.load(infile)
@@ -53,10 +54,10 @@ means_dic = {"4x4x22": 0, "3x3x20": 0, "10x10x20": 0}
 
 #fig1, ax1 = plt.subplots()
 num_plots = 2
-fig1, ax1 = plt.subplots(nrows=1, ncols=num_plots, figsize=(6.16, 2.64))
+fig1, ax1 = plt.subplots(nrows=num_plots, ncols=1, figsize=(6.47, 6.47))
 plt.tight_layout(h_pad=3.0)
 ax2 = ax1[1].twinx()
-ax2.sharey(ax1[1])
+#ax2.sharey(ax1[1])
 #fig1, ax1 = plt.subplots(nrows=len(config["size_dict"]["PScint"]), ncols=1, sharex='col', figsize=(10, 12), squeeze=True)
 #fig2, ax2 = plt.subplots(nrows=len(config["size_dict"]["PScint"]), ncols=1, sharex='col', figsize=(10, 12), squeeze=True)
 #fig3, ax3 = plt.subplots(nrows=len(config["size_dict"]["PScint"]), ncols=1, sharex='col', figsize=(10, 12), squeeze=True)
@@ -66,7 +67,7 @@ for material in materials:
 
     for s in range(num_plots):
         ax1[s].grid(which='both', axis='both')
-        ax1[s].grid(which='minor', axis='both', alpha=0.3)
+        ax1[s].grid(which='minor', axis='both', alpha=0.5)
         ax1[s].set_ylabel("Counts")
 
         #ax2[s].grid(which='both', axis='both')
@@ -88,192 +89,202 @@ for material in materials:
 
         for size in size_dict[material]:
 
-            for c in config_dict:
+            #for c in config_dict:
 
-                f_template = "../data/"+data_folder+material+"_"+size+c+"_run0_nt_Event_t0.csv"
+            f_template = "../data/"+data_folder+material+"_"+size+config["dtype"]+"_run0_nt_Event_t0.csv"
 
-                #merge data in input files
-                data_frames = merge(config["runs"], config["threads"], config["columns"], f_template)
-                Events = len(data_frames[0].index)
+            #merge data in input files
+            data_frames = merge(config["runs"], config["threads"], config["columns"], f_template)
+            Events = len(data_frames[0].index)
 
-                if config["dtype"]=="gammas":
+            if config["dtype"]=="gammas":
 
-                    #find events where photons were produced but not detected
-                    zero_production = len(data_frames[0].loc[data_frames[0]["NOfScintPhotons"] == 0].index)
-                    zero_detection = len(data_frames[0].loc[(data_frames[0]["NOfOptPhotons"] == 0) & (data_frames[0]["NOfScintPhotons"] > 0)]["NOfOptPhotons"].index)
-                    detection_events = data_frames[0].loc[(data_frames[0]["NOfOptPhotons"] > 0) & (data_frames[0]["NOfScintPhotons"] > 0)]
-                    detection_event_count = len(detection_events.index)
-                    #get detected/produced ratio
-                    percentages = detection_events["NOfOptPhotons"]/detection_events["NOfScintPhotons"]
-                    percentage_mean = percentages.mean()
-                    percentage_std = percentages.std()
-                    #mean_perecentage = percentages.sum()/detection_event_count
-                    print("zero production events:", zero_production)
-                    print("zero detection events:", zero_detection)
-                    print("normal events:", detection_event_count)
-                    print("mean percentage:", percentage_mean)
-                    print("std percentage:", percentage_std)
+                #find events where photons were produced but not detected
+                zero_production = len(data_frames[0].loc[data_frames[0]["NOfScintPhotons"] == 0].index)
+                zero_detection = len(data_frames[0].loc[(data_frames[0]["NOfOptPhotons"] == 0) & (data_frames[0]["NOfScintPhotons"] > 0)]["NOfOptPhotons"].index)
+                detection_events = data_frames[0].loc[(data_frames[0]["NOfOptPhotons"] > 0) & (data_frames[0]["NOfScintPhotons"] > 0)]
+                detection_event_count = len(detection_events.index)
+                #get detected/produced ratio
+                percentages = detection_events["NOfOptPhotons"]/detection_events["NOfScintPhotons"]
+                percentage_mean = percentages.mean()
+                percentage_std = percentages.std()
+                #mean_perecentage = percentages.sum()/detection_event_count
+                print("zero production events:", zero_production)
+                print("zero detection events:", zero_detection)
+                print("normal events:", detection_event_count)
+                print("mean percentage:", percentage_mean)
+                print("std percentage:", percentage_std)
 
-                    #print(len(data_frames), "runs read")
-                    #print("Tot events/run =", Events)
+                #print(len(data_frames), "runs read")
+                #print("Tot events/run =", Events)
 
-                    photoelectric_events = data_frames[0].loc[(data_frames[0]["Tot-OpAbs"] > 661)]
-                    photoelectric_events_ScintPhot_mean = photoelectric_events.loc[:,"NOfScintPhotons"].mean()
-                    photoelectric_events_ScintPhot_std = photoelectric_events.loc[:,"NOfScintPhotons"].std()
-                    photoelectric_events_SiPMPhot_mean = photoelectric_events.loc[:,"NOfOptPhotons"].mean()
-                    photoelectric_events_SiPMPhot_std = photoelectric_events.loc[:,"NOfOptPhotons"].std()
-                    print("photoelectric events:", len(photoelectric_events.index))
-                    print("photoelectric events production mean:", photoelectric_events_ScintPhot_mean)
-                    print("photoelectric events production std:", photoelectric_events_ScintPhot_std)
-                    print("photoelectric events SiPM mean:", photoelectric_events_SiPMPhot_mean)
-                    print("photoelectric events SiPM std:", photoelectric_events_SiPMPhot_std)
+                photoelectric_events = data_frames[0].loc[(data_frames[0]["Tot-OpAbs"] > 661)]
+                photoelectric_events_ScintPhot_mean = photoelectric_events.loc[:,"NOfScintPhotons"].mean()
+                photoelectric_events_ScintPhot_std = photoelectric_events.loc[:,"NOfScintPhotons"].std()
+                photoelectric_events_SiPMPhot_mean = photoelectric_events.loc[:,"NOfOptPhotons"].mean()
+                photoelectric_events_SiPMPhot_std = photoelectric_events.loc[:,"NOfOptPhotons"].std()
+                print("photoelectric events:", len(photoelectric_events.index))
+                print("photoelectric events production mean:", photoelectric_events_ScintPhot_mean)
+                print("photoelectric events production std:", photoelectric_events_ScintPhot_std)
+                print("photoelectric events SiPM mean:", photoelectric_events_SiPMPhot_mean)
+                print("photoelectric events SiPM std:", photoelectric_events_SiPMPhot_std)
 
-                #------------------Energy histogram------------------#
-                #adding energy deposition per process to compare with total data from simulation
-                data_frames[0] = data_frames[0].eval('Sum = Cerenkov+compt+CoupledTransportation+eBrem+eIon+msc+muIoni+phot')
+            #------------------Energy histogram------------------#
+            #adding energy deposition per process to compare with total data from simulation
+            data_frames[0] = data_frames[0].eval('Sum = Cerenkov+compt+CoupledTransportation+eBrem+eIon+msc+muIoni+phot')
 
-                diff_list  = [(t-s)/t if t>0 else 0 for t, s in zip(data_frames[0]["Tot-OpAbs"], data_frames[0]["Sum"])]
+            diff_list  = [(t-s)/t if t>0 else 0 for t, s in zip(data_frames[0]["Tot-OpAbs"], data_frames[0]["Sum"])]
 
-                data_frames[0]["Diff"] = diff_list
-                #data_frames[0]["Diff"] = data_frames[0].apply(err, axis=1) 
-                #data_frames[0] = data_frames[0].eval('Diff = (Tot - Sum)/Tot') 
+            data_frames[0]["Diff"] = diff_list
+            #data_frames[0]["Diff"] = data_frames[0].apply(err, axis=1) 
+            #data_frames[0] = data_frames[0].eval('Diff = (Tot - Sum)/Tot') 
 
-                #print(data_frames[0]["Tot-OpAbs"])
+            #print(data_frames[0]["Tot-OpAbs"])
 
-                counter = 0
-                threshold = 0.001
-                for e in range(Events):
-                    if np.abs(data_frames[0]["Diff"][e]) >= threshold:
-                        counter += 1
-                        #print(e, data_frames[0]["Tot-OpAbs"][e], data_frames[0]["Sum"][e], data_frames[0]["Diff"][e])
+            counter = 0
+            threshold = 0.001
+            for e in range(Events):
+                if np.abs(data_frames[0]["Diff"][e]) >= threshold:
+                    counter += 1
+                    #print(e, data_frames[0]["Tot-OpAbs"][e], data_frames[0]["Sum"][e], data_frames[0]["Diff"][e])
 
-                weird_events = data_frames[0].index[data_frames[0]["Tot-OpAbs"] > 662].tolist()
+            weird_events = data_frames[0].index[data_frames[0]["Tot-OpAbs"] > 662].tolist()
 
-                print(counter, "events have an error greater than", threshold)
-                if len(weird_events):
-                    print(len(weird_events), "events above photopeak", weird_events[0])
+            print(counter, "events have an error greater than", threshold)
+            if len(weird_events):
+                print(len(weird_events), "events above photopeak", weird_events[0])
 
-                max_En = max(data_frames[0]["Tot-OpAbs"])
-                min_En = min(data_frames[0]["Tot-OpAbs"])
+            max_En = max(data_frames[0]["Tot-OpAbs"])
+            min_En = min(data_frames[0]["Tot-OpAbs"])
 
-                bin_size = (max_En-min_En)/100
+            bin_size = (max_En-min_En)/100
 
-                bins = np.arange(min_En, max_En+bin_size, bin_size)
-                counts, _ = np.histogram(data_frames[0]["Tot-OpAbs"], bins=bins)
+            bins = np.arange(min_En, max_En+bin_size, bin_size)
+            counts, _ = np.histogram(data_frames[0]["Tot-OpAbs"], bins=bins)
 
-                if s==0:
-                    major_x = np.arange(2000, 5001, 1000)
-                    minor_x = np.arange(2000, 5001, 250)
+            if s==0:
+                major_x = np.arange(1000, 7001, 1000)
+                minor_x = np.arange(1000, 7001, 250)
 
-                    ax1[s].set_xlim(left=1500, right=4500)
-                    ax1[s].set_xticks(major_x)
-                    ax1[s].set_xticks(minor_x, minor=True)
+                ax1[s].set_xlim(left=1500, right=7000)
 
-                    ax1[s].set_title(label="Energy deposition")
-                    ax1[s].set_xlabel("Energy deposition/event [keV]")
-                    ax1[s].step(bins[:-1]+bin_size/2, counts, where="mid", label=c, color=config["color_dict"][c], ls=config["line_style"][material], alpha=config["alpha"][material], lw=2)
+                #major_x = np.arange(1500, 5001, 1000)
+                #minor_x = np.arange(1500, 5001, 250)
 
-                    ax1[s].legend(loc="upper right")
+                #ax1[s].set_xlim(left=1500, right=4500)
+                ax1[s].set_xticks(major_x)
+                ax1[s].set_xticks(minor_x, minor=True)
 
-                #------------------counting SiPM photons------------------#
-                SiPMphotons = data_frames[0]['NOfOptPhotons']
-                max_SiPMphotons = max(SiPMphotons)
-                min_SiPMphotons = min(SiPMphotons)
+                ax1[s].set_title(label="Energy deposition")
+                ax1[s].set_xlabel("Energy deposition/event [keV]")
+                ax1[s].step(bins[:-1]+bin_size/2, counts, where="mid", label=size, color=config["color_dict"][size], ls=config["line_style"][material], alpha=config["alpha"][material], lw=1)
 
-                bin_size = (max_SiPMphotons-min_SiPMphotons)/100
-                #bin_size = 5
+                ax1[s].legend(loc="upper right")
 
-                bins = np.arange(min_SiPMphotons, max_SiPMphotons+(bin_size/2.), bin_size)
-                counts, _ = np.histogram(SiPMphotons, bins=bins)
+            #------------------counting SiPM photons------------------#
+            SiPMphotons = data_frames[0]['NOfOptPhotons']
+            max_SiPMphotons = max(SiPMphotons)
+            min_SiPMphotons = min(SiPMphotons)
 
-                means_dic[size] = mean(bins, counts)
+            bin_size = (max_SiPMphotons-min_SiPMphotons)/100
+            #bin_size = 5
 
-                if s==1:
-                    #major_x = np.arange(1000, 7001, 500)
-                    #minor_x = np.arange(1000, 7001, 100)
+            bins = np.arange(min_SiPMphotons, max_SiPMphotons+(bin_size/2.), bin_size)
+            counts, _ = np.histogram(SiPMphotons, bins=bins)
 
-                    #ax1[s].set_xlim(left=1000, right=7000)
-                    #ax1[s].set_xticks(major_x)
-                    #ax1[s].set_xticks(minor_x, minor=True)
+            means_dic[size] = mean(bins, counts)
 
-                    #ax1[s].set_title("SiPM photon count")
-                    #ax1[s].set_xlabel("No of photons/event")
-                    ax2.step(bins[:-1]+bin_size/2, counts, where="mid", label=c, color=config["color_dict"][c], ls="--", alpha=config["alpha"][material], lw=2)
-                    #ax2.set_ylim(top=70)
-                #ax2[s].step(bins[:-1]+bin_size/2, counts, where="mid", label=material, color=config["color_dict"][size], ls=config["line_style"][material], alpha=config["alpha"][material], lw=3)
+            if s==1:
+                #major_x = np.arange(1000, 7001, 500)
+                #minor_x = np.arange(1000, 7001, 100)
 
-                #------------------counting Scint photons------------------#
+                #ax1[s].set_xlim(left=1000, right=7000)
+                #ax1[s].set_xticks(major_x)
+                #ax1[s].set_xticks(minor_x, minor=True)
 
-                ScintPhotons = data_frames[0]['NOfScintPhotons']
-                max_ScintPhotons = max(ScintPhotons)
-                min_ScintPhotons = min(ScintPhotons)
+                #ax1[s].set_title("SiPM photon count")
+                #ax1[s].set_xlabel("No of photons/event")
+                ax2.set_ylim(top=1050, bottom=-10)
+                ax2.set_yticks(ticks=[])
+                ax2.step(bins[:-1]+bin_size/2, counts, where="mid", label=size, color=config["color_dict"][size], ls="--", alpha=config["alpha"][material], lw=1)
+                #ax2.set_ylim(top=70)
+            #ax2[s].step(bins[:-1]+bin_size/2, counts, where="mid", label=material, color=config["color_dict"][size], ls=config["line_style"][material], alpha=config["alpha"][material], lw=3)
 
-                bin_size = (max_ScintPhotons-min_ScintPhotons)/100
-                #bin_size = 5
+            #------------------counting Scint photons------------------#
 
-                bins = np.arange(min_ScintPhotons, max_ScintPhotons+(bin_size/2.), bin_size)
-                counts, _ = np.histogram(ScintPhotons, bins=bins)
+            ScintPhotons = data_frames[0]['NOfScintPhotons']
+            max_ScintPhotons = max(ScintPhotons)
+            min_ScintPhotons = min(ScintPhotons)
 
-                means_dic[size] = mean(bins, counts)
+            bin_size = (max_ScintPhotons-min_ScintPhotons)/100
+            #bin_size = 5
 
-                if s==1:
-                    #major_x = np.arange(10000, 70001, 5000)
-                    #minor_x = np.arange(10000, 70001, 1000)
+            bins = np.arange(min_ScintPhotons, max_ScintPhotons+(bin_size/2.), bin_size)
+            counts, _ = np.histogram(ScintPhotons, bins=bins)
 
-                    #ax1[s].set_xlim(left=10000, right=70000)
-                    #ax1[s].set_xticks(major_x)
-                    #ax1[s].set_xticks(minor_x, minor=True)
+            means_dic[size] = mean(bins, counts)
 
-                    ax1[s].set_title("Photon detection and production")
-                    ax1[s].set_xlabel("No of photons/event")
-                    ax1[s].step(bins[:-1]+bin_size/2, counts, where="mid", label=c, color=config["color_dict"][c], ls="-", alpha=config["alpha"][material], lw=2)
-                    #ax1[s].set_ylim(top=70)
+            if s==1:
+                major_x = np.arange(10000, 70001, 5000)
+                minor_x = np.arange(10000, 70001, 1000)
 
-                    ax1[s].set_xscale(value="log")
-                    ax1[s].legend(loc="upper right", title="Photons produced")
-                #ax3[s].step(bins[:-1]+bin_size/2, counts, where="mid", label=material, color=config["color_dict"][size], ls=config["line_style"][material], alpha=config["alpha"][material], lw=3)
+                ax1[s].set_xlim(left=1000, right=100000)
+                ax1[s].set_xticks(major_x)
+                ax1[s].set_xticks(minor_x, minor=True)
+                ax1[s].set_yticks(np.arange(0,1001,200))
+                ax1[s].set_yticks(np.arange(0,1001,100), minor=True)
+                ax1[s].set_title("Photon detection and production")
+                ax1[s].set_xlabel("No of photons/event")
+                ax1[s].step(bins[:-1]+bin_size/2, counts, where="mid", label=size, color=config["color_dict"][size], ls="-", alpha=config["alpha"][material], lw=1)
+                #ax1[s].set_ylim(top=70)
 
-                f_template = "../data/"+data_folder+size+"_run0_nt_Event_t0.csv"
+                ax1[s].set_xlim(left=1e3, right=1e5)
+                ax1[s].set_ylim(top=1050, bottom=-10)
+                ax1[s].set_xscale(value="log")
+                ax1[s].legend(loc="upper right", title="Photons produced")
+            #ax3[s].step(bins[:-1]+bin_size/2, counts, where="mid", label=material, color=config["color_dict"][size], ls=config["line_style"][material], alpha=config["alpha"][material], lw=3)
 
-                if config["dtype"] == "gammas":
-                    print("--------------------------------------------------------")
-                    E0 = 662
-                    Compt_edge = E0*(2*(E0/511))/(1+2*(E0/511))
-                    ax1[s].axvline(x=Compt_edge, label=r"$E_C$", ls="--", color=config["color_dict"][c], lw=1)
-                    #ax1[s].axvline(x=E0, ls="--", color=config["color_dict"][size], lw=1)
-                    #ax1.text(s=r"$E_C$", x=Compt_edge+10, y=max_En)
+            f_template = "../data/"+data_folder+size+"_run0_nt_Event_t0.csv"
 
-                    ax1[s].set_yscale(value="log")
-                    #ax2[s].set_yscale(value="log")
-                    #ax3[s].set_yscale(value="log")
+            if config["dtype"] == "gammas":
+                print("--------------------------------------------------------")
+                E0 = 662
+                Compt_edge = E0*(2*(E0/511))/(1+2*(E0/511))
+                ax1[s].axvline(x=Compt_edge, label=r"$E_C$", ls="--", color=config["color_dict"][size], lw=1)
+                #ax1[s].axvline(x=E0, ls="--", color=config["color_dict"][size], lw=1)
+                #ax1.text(s=r"$E_C$", x=Compt_edge+10, y=max_En)
 
-                #ax1[s].legend(loc="upper right")
+                ax1[s].set_yscale(value="log")
+                #ax2[s].set_yscale(value="log")
+                #ax3[s].set_yscale(value="log")
 
-                #preface = material+config["dtype"]+"_"
+            #ax1[s].legend(loc="upper right")
 
-                save_file = re.sub("_nt_.*?\.", ".", f_template)
-                save_file = re.sub("/data/", "/figures/", save_file)
-                save_file = re.sub(".csv", "energy_spectra.pdf", save_file)
+            #preface = material+config["dtype"]+"_"
 
-                major_x = np.arange(0, 22501, 2500)
-                minor_x = np.arange(0, 22501, 500)
+            save_file = re.sub("_nt_.*?\.", ".", f_template)
+            save_file = re.sub("/data/", "/figures/", save_file)
+            save_file = re.sub(".csv", "energy_spectra.pdf", save_file)
 
-                #ax2[s].set_xlim(left=-500, right=23000)
-                #ax2[s].set_xticks(major_x)
-                #ax2[s].set_xticks(minor_x, minor=True)
+            major_x = np.arange(0, 22501, 2500)
+            minor_x = np.arange(0, 22501, 500)
 
-                #ax2[s].legend(loc="upper right", title=size+r" mm$^3$")
+            #ax2[s].set_xlim(left=-500, right=23000)
+            #ax2[s].set_xticks(major_x)
+            #ax2[s].set_xticks(minor_x, minor=True)
 
-                #major_x = np.arange(0, 22501, 2500)
-                #minor_x = np.arange(0, 22501, 500)
+            #ax2[s].legend(loc="upper right", title=size+r" mm$^3$")
 
-                #ax3[s].set_xlim(left=-500, right=23000)
-                #ax3[s].set_xticks(major_x)
-                #ax3[s].set_xticks(minor_x, minor=True)
+            #major_x = np.arange(0, 22501, 2500)
+            #minor_x = np.arange(0, 22501, 500)
 
-                #ax3[s].legend(loc="upper right", title=size+r" mm$^3$")
+            #ax3[s].set_xlim(left=-500, right=23000)
+            #ax3[s].set_xticks(major_x)
+            #ax3[s].set_xticks(minor_x, minor=True)
 
-    ax2.legend(loc="upper center", title="photons reaching the SiPM")
+            #ax3[s].legend(loc="upper right", title=size+r" mm$^3$")
+
+    ax2.legend(loc="upper center", title="Photons reaching the SiPM")
 
 #ax1[1].text(s=r"$E_C$", x=Compt_edge+10, y=max_En)
 

@@ -1,7 +1,8 @@
 import matplotlib as mpl
 
-fsize = 18
-mpl.rcParams['legend.fontsize'] = 14
+fsize = 20
+mpl.rcParams['legend.fontsize'] = 16
+mpl.rcParams['axes.titlesize'] = fsize+2
 mpl.rcParams["figure.figsize"] = (8,5)
 mpl.rcParams['axes.labelsize'] = fsize
 mpl.rcParams['xtick.labelsize'] = fsize
@@ -57,7 +58,8 @@ ax1.grid(which="both")
 ax1.set_xticks(major_ticks)
 ax1.set_xticks(minor_ticks, minor=True)
 ax1.tick_params(axis='x', which='minor', grid_alpha=0.3)
-ax1.set_title("Energy deposition, square")
+ax1.ticklabel_format(axis='y', style='sci', scilimits=(0,3))
+ax1.set_title("Squared scintillator")
 #ax1.set_title("Energy deposition, cylinder")
 ax1.set_xlabel(r"zenith angle $\theta$ [$^\circ$]")
 ax1.set_ylabel("Average energy deposit per event [keV]")
@@ -66,11 +68,12 @@ ax2.grid(which="both")
 ax2.set_xticks(major_ticks)
 ax2.set_xticks(minor_ticks, minor=True)
 ax2.tick_params(axis='x', which='minor', grid_alpha=0.3)
+ax2.ticklabel_format(axis='y', style='sci', scilimits=(0,3))
 ax2.legend()
-ax2.set_title("Photon detection and production, square")
+ax2.set_title("Squared scintillator")
 #ax2.set_title("Photon count, cylinder")
 ax2.set_xlabel(r"zenith angle $\theta$ [$^\circ$]")
-ax2.set_ylabel("photon counts/event")
+ax2.set_ylabel("Average photon counts/event")
 
 for f_template in f_templates:
     
