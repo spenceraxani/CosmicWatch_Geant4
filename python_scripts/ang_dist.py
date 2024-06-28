@@ -19,14 +19,14 @@ import numpy as np
 import re
 
 #read data
-runs = int(input("enter number of runs: "))
-threads = int(input("enter number of threads: "))
-columns = int(input("enter number of columns: "))
+runs = 1#int(input("enter number of runs: "))
+threads = 4#int(input("enter number of threads: "))
+columns = 15#int(input("enter number of columns: "))
 
 from merge_threads import merge
 
 #merge data in imput files
-f_templates = ["../data/run0-ang_dis_nt_Event_t0.csv"]
+f_templates = ["../data/PScint/ang_dist/run0-ang_dis_nt_Event_t0.csv"]
 #f_templates = ["../data/test_nt_Event_t0.csv"]
 
 #means_dic = {"5x5x1": 0, "10x5x2": 0}
@@ -178,14 +178,14 @@ ax1.legend(loc="upper left")
 save_file = re.sub("_t.*?\.", ".", f_templates[0])
 save_file = re.sub("/data/", "/figures/", save_file)
 #save_file = re.sub("-ang_dis_", "_", save_file)
-save_file = re.sub(".csv", "_energy_spectra.pdf", save_file)
+save_file = re.sub(".csv", "_energy_spectra_1.pdf", save_file)
 
 print("saving to:", save_file)
 fig1.savefig(save_file, bbox_inches="tight")
 
 ax2.legend(loc="upper left")
 
-save_file = re.sub("_energy_spectra.pdf", "_photon_count.pdf", save_file)
+save_file = re.sub("_energy_spectra.pdf", "_photon_count_1.pdf", save_file)
 #save_file = re.sub("\.pdf", "_photon_count-SiPM-placement.pdf", save_file)
 
 print("saving to:", save_file)
