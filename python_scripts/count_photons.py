@@ -1,7 +1,8 @@
 import matplotlib as mpl
 
-fsize = 16
+fsize = 12
 mpl.rcParams['legend.fontsize'] = fsize-2
+mpl.rcParams['axes.titlesize'] = fsize+2
 mpl.rcParams["figure.figsize"] = (10,4)
 mpl.rcParams['axes.labelsize'] = fsize
 mpl.rcParams['xtick.labelsize'] = fsize
@@ -47,15 +48,16 @@ materials = config["materials"]
 #print(materials)
 size_dict = config["size_dict"]
 #print(size_dict)
+config_dict = config["config_dict"]
 
 means_dic = {"4x4x22": 0, "3x3x20": 0, "10x10x20": 0}
 
 #fig1, ax1 = plt.subplots()
 num_plots = 2
-fig1, ax1 = plt.subplots(nrows=num_plots, ncols=1, figsize=(10, 10))
+fig1, ax1 = plt.subplots(nrows=num_plots, ncols=1, figsize=(6.47, 6.47))
 plt.tight_layout(h_pad=3.0)
 ax2 = ax1[1].twinx()
-ax2.sharey(ax1[1])
+#ax2.sharey(ax1[1])
 #fig1, ax1 = plt.subplots(nrows=len(config["size_dict"]["PScint"]), ncols=1, sharex='col', figsize=(10, 12), squeeze=True)
 #fig2, ax2 = plt.subplots(nrows=len(config["size_dict"]["PScint"]), ncols=1, sharex='col', figsize=(10, 12), squeeze=True)
 #fig3, ax3 = plt.subplots(nrows=len(config["size_dict"]["PScint"]), ncols=1, sharex='col', figsize=(10, 12), squeeze=True)
@@ -65,7 +67,7 @@ for material in materials:
 
     for s in range(num_plots):
         ax1[s].grid(which='both', axis='both')
-        ax1[s].grid(which='minor', axis='both', alpha=0.3)
+        ax1[s].grid(which='minor', axis='both', alpha=0.5)
         ax1[s].set_ylabel("Counts")
 
         #ax2[s].grid(which='both', axis='both')
@@ -86,6 +88,8 @@ for material in materials:
             #ax3[s].set_xlabel("No of photons/event")
 
         for size in size_dict[material]:
+
+            #for c in config_dict:
 
             f_template = "../data/"+data_folder+material+"_"+size+config["dtype"]+"_run0_nt_Event_t0.csv"
 
@@ -159,16 +163,21 @@ for material in materials:
             counts, _ = np.histogram(data_frames[0]["Tot-OpAbs"], bins=bins)
 
             if s==0:
-                major_x = np.arange(1000, 7001, 500)
-                minor_x = np.arange(1000, 7001, 100)
+                major_x = np.arange(1000, 7001, 1000)
+                minor_x = np.arange(1000, 7001, 250)
 
-                ax1[s].set_xlim(left=1000, right=7000)
+                ax1[s].set_xlim(left=1500, right=7000)
+
+                #major_x = np.arange(1500, 5001, 1000)
+                #minor_x = np.arange(1500, 5001, 250)
+
+                #ax1[s].set_xlim(left=1500, right=4500)
                 ax1[s].set_xticks(major_x)
                 ax1[s].set_xticks(minor_x, minor=True)
 
                 ax1[s].set_title(label="Energy deposition")
                 ax1[s].set_xlabel("Energy deposition/event [keV]")
-                ax1[s].step(bins[:-1]+bin_size/2, counts, where="mid", label=size+r" mm$^3$", color=config["color_dict"][size], ls=config["line_style"][material], alpha=config["alpha"][material], lw=2)
+                ax1[s].step(bins[:-1]+bin_size/2, counts, where="mid", label=size, color=config["color_dict"][size], ls=config["line_style"][material], alpha=config["alpha"][material], lw=1)
 
                 ax1[s].legend(loc="upper right")
 
@@ -195,7 +204,9 @@ for material in materials:
 
                 #ax1[s].set_title("SiPM photon count")
                 #ax1[s].set_xlabel("No of photons/event")
-                ax2.step(bins[:-1]+bin_size/2, counts, where="mid", label=size+r" mm$^3$", color=config["color_dict"][size], ls="--", alpha=config["alpha"][material], lw=2)
+                ax2.set_ylim(top=1050, bottom=-10)
+                ax2.set_yticks(ticks=[])
+                ax2.step(bins[:-1]+bin_size/2, counts, where="mid", label=size, color=config["color_dict"][size], ls="--", alpha=config["alpha"][material], lw=1)
                 #ax2.set_ylim(top=70)
             #ax2[s].step(bins[:-1]+bin_size/2, counts, where="mid", label=material, color=config["color_dict"][size], ls=config["line_style"][material], alpha=config["alpha"][material], lw=3)
 
@@ -214,18 +225,21 @@ for material in materials:
             means_dic[size] = mean(bins, counts)
 
             if s==1:
-                #major_x = np.arange(10000, 70001, 5000)
-                #minor_x = np.arange(10000, 70001, 1000)
+                major_x = np.arange(10000, 70001, 5000)
+                minor_x = np.arange(10000, 70001, 1000)
 
-                #ax1[s].set_xlim(left=10000, right=70000)
-                #ax1[s].set_xticks(major_x)
-                #ax1[s].set_xticks(minor_x, minor=True)
-
+                ax1[s].set_xlim(left=1000, right=100000)
+                ax1[s].set_xticks(major_x)
+                ax1[s].set_xticks(minor_x, minor=True)
+                ax1[s].set_yticks(np.arange(0,1001,200))
+                ax1[s].set_yticks(np.arange(0,1001,100), minor=True)
                 ax1[s].set_title("Photon detection and production")
                 ax1[s].set_xlabel("No of photons/event")
-                ax1[s].step(bins[:-1]+bin_size/2, counts, where="mid", label=size+r" mm$^3$", color=config["color_dict"][size], ls="-", alpha=config["alpha"][material], lw=2)
+                ax1[s].step(bins[:-1]+bin_size/2, counts, where="mid", label=size, color=config["color_dict"][size], ls="-", alpha=config["alpha"][material], lw=1)
                 #ax1[s].set_ylim(top=70)
 
+                ax1[s].set_xlim(left=1e3, right=1e5)
+                ax1[s].set_ylim(top=1050, bottom=-10)
                 ax1[s].set_xscale(value="log")
                 ax1[s].legend(loc="upper right", title="Photons produced")
             #ax3[s].step(bins[:-1]+bin_size/2, counts, where="mid", label=material, color=config["color_dict"][size], ls=config["line_style"][material], alpha=config["alpha"][material], lw=3)
@@ -270,7 +284,7 @@ for material in materials:
 
             #ax3[s].legend(loc="upper right", title=size+r" mm$^3$")
 
-    ax2.legend(loc="upper center", title="photons reaching the SiPM")
+    ax2.legend(loc="upper center", title="Photons reaching the SiPM")
 
 #ax1[1].text(s=r"$E_C$", x=Compt_edge+10, y=max_En)
 
@@ -285,14 +299,14 @@ save_file = "../figures/"+data_folder+materials[0]+"_"+config["dtype"]+".pdf"
 print("saving to:", save_file)
 fig1.savefig(save_file, bbox_inches="tight")
 
-save_file = re.sub("energy_spectra", "SiPMphotons", save_file)
+#save_file = re.sub("energy_spectra", "SiPMphotons", save_file)
 #save_file = re.sub("\.pdf", "_photon_count-SiPM-placement.pdf", save_file)
 
-print("saving to:", save_file)
+#print("saving to:", save_file)
 #fig2.savefig(save_file, bbox_inches="tight")
 
-save_file = re.sub("SiPMphotons", "ScintPhotons", save_file)
+#save_file = re.sub("SiPMphotons", "ScintPhotons", save_file)
 #save_file = re.sub("\.pdf", "_photon_count-SiPM-placement.pdf", save_file)
 
-print("saving to:", save_file)
+#print("saving to:", save_file)
 #fig3.savefig(save_file, bbox_inches="tight")

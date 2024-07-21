@@ -4,17 +4,16 @@
     ],
     "size_dict": {
         "PScint": [
-            "50x50x10",
-            "100x50x20"
+            "50x50x10"
         ]
     },
     "config_dict": [
-        "50x50x10",
-        "100x50x20"
+        "base",
+        "side"
     ],
     "color_dict": {
-        "50x50x10": "tab:blue",
-        "100x50x20": "tab:orange"
+        "base": "tab:blue",
+        "side": "tab:orange"
     },
     "line_style":{
         "PScint": "-"
@@ -25,5 +24,5 @@
     "runs": 1,
     "threads": 4,
     "columns": 16,
-    "dtype": "scint_size"
+    "dtype": "SiPM_placement"
 }
